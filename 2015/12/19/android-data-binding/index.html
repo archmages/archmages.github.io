@@ -1,0 +1,842 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
+
+
+
+
+
+
+<meta name="description" content="背景Google在2015年的I/O大会上发布了三个重要的支持库：    
+
+Material Design支持库：Android Support Design  
+百分比布局支持库：Percent support lib  
+数据绑定支持库：Data Binding Library
+
+
+
+Data Binding有什么作用
+是官方支持的MVVM模式框架
+可以直接在静态布局XML中绑定数据，无需再">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Data Binding(More Xml, Less Java)">
+<meta property="og:url" content="http://yoursite.com/2015/12/19/android-data-binding/index.html">
+<meta property="og:site_name" content="Archmage's Temple">
+<meta property="og:description" content="背景Google在2015年的I/O大会上发布了三个重要的支持库：    
+
+Material Design支持库：Android Support Design  
+百分比布局支持库：Percent support lib  
+数据绑定支持库：Data Binding Library
+
+
+
+Data Binding有什么作用
+是官方支持的MVVM模式框架
+可以直接在静态布局XML中绑定数据，无需再">
+<meta property="og:updated_time" content="2015-12-21T03:04:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Data Binding(More Xml, Less Java)">
+<meta name="twitter:description" content="背景Google在2015年的I/O大会上发布了三个重要的支持库：    
+
+Material Design支持库：Android Support Design  
+百分比布局支持库：Percent support lib  
+数据绑定支持库：Data Binding Library
+
+
+
+Data Binding有什么作用
+是官方支持的MVVM模式框架
+可以直接在静态布局XML中绑定数据，无需再">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android Data Binding(More Xml, Less Java) | Archmage's Temple </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?da710790a496bc89a396c9df47db0d72";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Archmage's Temple</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">追求卓越</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android Data Binding(More Xml, Less Java)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-19T17:51:10+08:00" content="2015-12-19">
+              2015-12-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/19/android-data-binding/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/19/android-data-binding/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="u80CC_u666F"><a href="#u80CC_u666F" class="headerlink" title="背景"></a>背景</h1><p>Google在2015年的I/O大会上发布了三个重要的支持库：    </p>
+<ul>
+<li>Material Design支持库：Android Support Design  </li>
+<li>百分比布局支持库：Percent support lib  </li>
+<li><font color="#FF69B4"><strong>数据绑定支持库：Data Binding Library</strong></font>
+
+</li>
+</ul>
+<h1 id="Data_Binding_u6709_u4EC0_u4E48_u4F5C_u7528"><a href="#Data_Binding_u6709_u4EC0_u4E48_u4F5C_u7528" class="headerlink" title="Data Binding有什么作用"></a>Data Binding有什么作用</h1><ul>
+<li>是官方支持的<a href="https://www.objc.io/issues/13-architecture/mvvm/" target="_blank" rel="external">MVVM</a>模式框架</li>
+<li><p>可以直接在静态布局XML中绑定数据，无需再findViewById,然后再手动设置数据  </p>
+<p><code>Question:是不是RoboGuice、AndroidAnotations...这样的依赖注入框架会慢慢淡出市场</code></p>
+</li>
+<li>可以提高解析XML的速度</li>
+<li>UI与功能解耦</li>
+</ul>
+<h1 id="Data_Binding_u7684_u9700_u6C42_u4E0E_u652F_u6301"><a href="#Data_Binding_u7684_u9700_u6C42_u4E0E_u652F_u6301" class="headerlink" title="Data Binding的需求与支持"></a>Data Binding的需求与支持</h1><h2 id="u9700_u6C42"><a href="#u9700_u6C42" class="headerlink" title="需求"></a>需求</h2><ul>
+<li>Android Studio 1.3.0-beta1 或更高版本</li>
+<li>Gradle plugin 1.3.0以上</li>
+</ul>
+<h2 id="u652F_u6301"><a href="#u652F_u6301" class="headerlink" title="支持"></a>支持</h2><ul>
+<li>Android 2.1(API level 7+)以上</li>
+</ul>
+<a id="more"></a>
+<h1 id="u5982_u4F55_u4F7F_u7528Data_Binding"><a href="#u5982_u4F55_u4F7F_u7528Data_Binding" class="headerlink" title="如何使用Data Binding"></a>如何使用Data Binding</h1><h2 id="u914D_u7F6E"><a href="#u914D_u7F6E" class="headerlink" title="配置"></a>配置</h2><h3 id="Gradle__u63D2_u4EF6_u4E3A1-3_u7684_u914D_u7F6E"><a href="#Gradle__u63D2_u4EF6_u4E3A1-3_u7684_u914D_u7F6E" class="headerlink" title="Gradle 插件为1.3的配置"></a>Gradle 插件为1.3的配置</h3><p>在工程的根build.gradle文件中配置如下：  </p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    <span class="keyword">classpath</span> <span class="string">'com.android.tools.build:gradle:1.3.1'</span></span><br><span class="line">    <span class="keyword">classpath</span> <span class="string">'com.android.databinding:dataBinder:1.+'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在app的build.gradle文件中配置如下：  </p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></span><br><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.databinding'</span></span><br></pre></td></tr></table></figure>
+<h3 id="Gradle__u63D2_u4EF6_u4E3A1-5-+_u7684_u914D_u7F6E_uFF1A"><a href="#Gradle__u63D2_u4EF6_u4E3A1-5-+_u7684_u914D_u7F6E_uFF1A" class="headerlink" title="Gradle 插件为1.5.+的配置："></a>Gradle 插件为1.5.+的配置：</h3><p>只需要在app的build.gradle文件中如下配置就ok:  </p>
+<figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="name">android</span> &#123;</span><br><span class="line">    ....</span><br><span class="line">    dataBinding &#123;</span><br><span class="line">        <span class="literal">enabled</span> = <span class="keyword">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u4F7F_u7528_u6D41_u7A0B"><a href="#u4F7F_u7528_u6D41_u7A0B" class="headerlink" title="使用流程"></a>使用流程</h2><h3 id="u7B2C_u4E00_u6B65_uFF1A_u521B_u5EFAXML"><a href="#u7B2C_u4E00_u6B65_uFF1A_u521B_u5EFAXML" class="headerlink" title="第一步：创建XML"></a>第一步：创建XML</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">layout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">data</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">variable</span> <span class="attribute">name</span>=<span class="value">"user"</span> <span class="attribute">type</span>=<span class="value">"com.example.User"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="title">data</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">LinearLayout</span></span><br><span class="line">       <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span></span><br><span class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:text</span>=<span class="value">"@&#123;user.firstName&#125;"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:text</span>=<span class="value">"@&#123;user.lastName&#125;"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">layout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="u7B2C_u4E8C_u6B65_uFF1A_u5B9A_u4E49_u6570_u636E"><a href="#u7B2C_u4E8C_u6B65_uFF1A_u5B9A_u4E49_u6570_u636E" class="headerlink" title="第二步：定义数据"></a>第二步：定义数据</h3><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> class User &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">String</span> firstName;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">String</span> lastName;</span><br><span class="line">   <span class="keyword">public</span> User(<span class="keyword">String</span> firstName, <span class="keyword">String</span> lastName) &#123;</span><br><span class="line">       <span class="keyword">this</span>.firstName = firstName;</span><br><span class="line">       <span class="keyword">this</span>.lastName = lastName;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="u7B2C_u4E09_u6B65_uFF1A_u7ED1_u5B9A_u6570_u636E"><a href="#u7B2C_u4E09_u6B65_uFF1A_u7ED1_u5B9A_u6570_u636E" class="headerlink" title="第三步：绑定数据"></a>第三步：绑定数据</h3><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">   MainActivityBinding binding = DataBindingUtil.setContentView(<span class="keyword">this</span>, R.layout.main_activity);</span><br><span class="line">   User user = <span class="keyword">new</span> User(<span class="string">"Test"</span>, <span class="string">"User"</span>);</span><br><span class="line">   binding.setUser(user);</span><br></pre></td></tr></table></figure>
+<h1 id="Data_Binding_u4F7F_u7528_u4E4B_u8BE6_u7EC6_u4ECB_u7ECD"><a href="#Data_Binding_u4F7F_u7528_u4E4B_u8BE6_u7EC6_u4ECB_u7ECD" class="headerlink" title="Data Binding使用之详细介绍"></a>Data Binding使用之详细介绍</h1><h3 id="u4F7F_u7528_u7C7B_u65B9_u6CD5"><a href="#u4F7F_u7528_u7C7B_u65B9_u6CD5" class="headerlink" title="使用类方法"></a>使用类方法</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="built_in">data</span>&gt;</span><br><span class="line">    &lt;<span class="keyword">import</span> <span class="keyword">type</span>=<span class="string">"com.example.MyStringUtils"</span>/&gt;</span><br><span class="line">    &lt;<span class="built_in">variable</span> name=<span class="string">"user"</span> <span class="keyword">type</span>=<span class="string">"com.example.User"</span>/&gt;</span><br><span class="line">&lt;/<span class="built_in">data</span>&gt;</span><br><span class="line">&lt;TextView</span><br><span class="line">   android:text=<span class="string">"@&#123;MyStringUtils.capitalize(user.lastName)&#125;"</span></span><br><span class="line">   android:layout_width=<span class="string">"wrap_content"</span></span><br><span class="line">   android:layout_height=<span class="string">"wrap_content"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="u7C7B_u578B_u522B_u540D"><a href="#u7C7B_u578B_u522B_u540D" class="headerlink" title="类型别名"></a>类型别名</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="built_in">data</span>&gt;</span><br><span class="line">       &lt;<span class="keyword">import</span> <span class="keyword">type</span>=<span class="string">"archmages.github.databindingsamples.model.User"</span>/&gt;</span><br><span class="line">       &lt;<span class="keyword">import</span> <span class="keyword">type</span>=<span class="string">"archmages.github.databindingsamples.model.real.User"</span> alias=<span class="string">"RealUser"</span>/&gt;</span><br><span class="line">       &lt;<span class="built_in">variable</span></span><br><span class="line">           name=<span class="string">"user"</span></span><br><span class="line">           <span class="keyword">type</span>=<span class="string">"RealUser"</span>/&gt;</span><br><span class="line">   &lt;/<span class="built_in">data</span>&gt;</span><br><span class="line">   &lt;TextView</span><br><span class="line">           android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">           android:layout_height=<span class="string">"wrap_content"</span></span><br><span class="line">           android:text=<span class="string">'@&#123;user.firstName&#125;'</span>/&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Null_Coalescing_u8FD0_u7B97_u7B26"><a href="#Null_Coalescing_u8FD0_u7B97_u7B26" class="headerlink" title="Null Coalescing运算符"></a>Null Coalescing运算符</h3><p>空聚合运算操作（??）， 如果左边的运算对象不为空的话选择左边，否则选择右边<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:<span class="type">text</span>=<span class="string">"@&#123;user.displayName ?? user.lastName&#125;"</span></span><br></pre></td></tr></table></figure></p>
+<p>这个运算等价于:<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:text="@&#123;<span class="built_ins">user</span>.displayName != null ? <span class="built_ins">user</span>.displayName : <span class="built_ins">user</span>.lastName&#125;"</span><br></pre></td></tr></table></figure></p>
+<h3 id="u4F7F_u7528_u5C5E_u6027_u503C"><a href="#u4F7F_u7528_u5C5E_u6027_u503C" class="headerlink" title="使用属性值"></a>使用属性值</h3><p>如下，我们要使用View的Visible属性：  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">data</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">import</span> <span class="attribute">type</span>=<span class="value">"android.view.View"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">data</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">TextView</span></span><br><span class="line">   <span class="attribute">android:text</span>=<span class="value">"@&#123;user.lastName&#125;"</span></span><br><span class="line">   <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">   <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">   <span class="attribute">android:visibility</span>=<span class="value">"@&#123;user.isAdult ? View.VISIBLE : View.GONE&#125;"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="u4F7F_u7528_u8D44_u6E90_u6570_u636E"><a href="#u4F7F_u7528_u8D44_u6E90_u6570_u636E" class="headerlink" title="使用资源数据"></a>使用资源数据</h3><p>Data Binding也是支持直接访问资源数据的<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:padding=<span class="string">"<span class="subst">@&#123;large? <span class="variable">@dimen</span>/largePadding : <span class="variable">@dimen</span>/smallPadding&#125;</span>"</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="u5E26ID_u7684View"><a href="#u5E26ID_u7684View" class="headerlink" title="带ID的View"></a>带ID的View</h3><p><strong>Data Binding</strong> 有效降低了代码的冗余性，甚至完全没有必要再去获取一个 View 实例，万一我们真的就需要的时候，只要给 View 定义一个 ID，Data Binding 就会为我们生成一个对应的 final 变量    </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">layout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">data</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">variable</span> <span class="attribute">name</span>=<span class="value">"user"</span> <span class="attribute">type</span>=<span class="value">"com.example.User"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="title">data</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">LinearLayout</span></span><br><span class="line">       <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span></span><br><span class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:text</span>=<span class="value">"@&#123;user.firstName&#125;"</span></span><br><span class="line">   		   <span class="attribute">android:id</span>=<span class="value">"@+id/firstName"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">           <span class="attribute">android:text</span>=<span class="value">"@&#123;user.lastName&#125;"</span></span><br><span class="line">  		   <span class="attribute">android:id</span>=<span class="value">"@+id/lastName"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">layout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Data Binding会自动生成成员变量:      </p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> TextView firstName;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> TextView lastName;</span><br></pre></td></tr></table></figure>
+<p>这样我们通过binding对象，可以直接访问这些View, 如此之方便  </p>
+<h3 id="List_View_Item"><a href="#List_View_Item" class="headerlink" title="List View Item"></a>List View Item</h3><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> i, View view, ViewGroup viewGroup)</span> </span>&#123;</span><br><span class="line">        ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()),</span><br><span class="line">                R.layout.user_list_item_view, viewGroup, <span class="keyword">false</span>);</span><br><span class="line">        binding.setVariable(BR.user, users.get(i));</span><br><span class="line">        binding.executePendingBindings();</span><br><span class="line">        <span class="function"><span class="keyword">return</span> binding.<span class="title">getRoot</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Includes"><a href="#Includes" class="headerlink" title="Includes"></a>Includes</h3><p>有时候我们为了避免layout的xml写得过长，有一些共用的View会抽出来，通过include的方式加入xml中，Data Binding也支持include binding, 我们如何传递binding给include layout呢？ 通过Application命名空间 <code>bind:</code>和变量名<code>@{...}</code>      </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">layout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">        <span class="attribute">xmlns:bind</span>=<span class="value">"http://schemas.android.com/apk/res-auto"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">data</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">variable</span> <span class="attribute">name</span>=<span class="value">"user"</span> <span class="attribute">type</span>=<span class="value">"com.example.User"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="title">data</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">LinearLayout</span></span><br><span class="line">       <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span></span><br><span class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">include</span> <span class="attribute">layout</span>=<span class="value">"@layout/name"</span></span><br><span class="line">           <span class="attribute">bind:user</span>=<span class="value">"@&#123;user&#125;"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">include</span> <span class="attribute">layout</span>=<span class="value">"@layout/contact"</span></span><br><span class="line">           <span class="attribute">bind:user</span>=<span class="value">"@&#123;user&#125;"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">layout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="u7A7A_u6307_u9488_u5B89_u5168"><a href="#u7A7A_u6307_u9488_u5B89_u5168" class="headerlink" title="空指针安全"></a>空指针安全</h3><p>Data Binding自动会检查空对象并且避免空指针异常，例如：在表达式：<code>@{user.name}</code>中，如果<code>user</code>是null, <code>user.name</code>会被指定一个默认值<code>null</code>, 如果我们用<code>@{user.age}</code>, 这个地方age是int型，那么当user为null的时候，<code>user.age</code>默认是0</p>
+<h3 id="Collections"><a href="#Collections" class="headerlink" title="Collections"></a>Collections</h3><p>常用集合类型，Data Binding都支持：arrays, lists, sparse lists, and maps      </p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;data&gt;</span><br><span class="line">    &lt;<span class="keyword">import</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"android.util.SparseArray"</span>/&gt;</span><br><span class="line">    &lt;<span class="keyword">import</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"java.util.Map"</span>/&gt;</span><br><span class="line">    &lt;<span class="keyword">import</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"java.util.List"</span>/&gt;</span><br><span class="line">    &lt;variable name=<span class="string">"list"</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"List&amp;lt;String&gt;"</span>/&gt;</span><br><span class="line">    &lt;variable name=<span class="string">"sparse"</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"SparseArray&amp;lt;String&gt;"</span>/&gt;</span><br><span class="line">    &lt;variable name=<span class="string">"map"</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"Map&amp;lt;String, String&gt;"</span>/&gt;</span><br><span class="line">    &lt;variable name=<span class="string">"index"</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"int"</span>/&gt;</span><br><span class="line">    &lt;variable name=<span class="string">"key"</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"String"</span>/&gt;</span><br><span class="line">&lt;/data&gt;</span><br><span class="line">android:text=<span class="string">"@&#123;list[index]&#125;"</span></span><br><span class="line">android:text=<span class="string">"@&#123;sparse[index]&#125;"</span></span><br><span class="line">android:text=<span class="string">"@&#123;map[key]&#125;"</span></span><br></pre></td></tr></table></figure>
+<p><strong>[备注]</strong><br>这边大家注意：在xml中<code>&lt;</code>是特殊字符，当引用List, Map…时，左尖括号需要用转义字符<code>&amp;lt;</code>替换, 同时，引号<code>&quot;</code>要用<code>&amp;quot;</code>替换</p>
+<h3 id="u8868_u8FBE_u5F0F"><a href="#u8868_u8FBE_u5F0F" class="headerlink" title="表达式"></a>表达式</h3><h5 id="Data_Binding_u652F_u6301_u5E38_u7528_u8868_u8FBE_u5F0F_uFF1A"><a href="#Data_Binding_u652F_u6301_u5E38_u7528_u8868_u8FBE_u5F0F_uFF1A" class="headerlink" title="Data Binding支持常用表达式："></a>Data Binding支持常用表达式：</h5><ul>
+<li>Mathematical + - / * %</li>
+<li>String concatenation +</li>
+<li>Logical &amp;&amp; ||</li>
+<li>Binary &amp; | ^</li>
+<li>Unary + - ! ~</li>
+<li>Shift &gt;&gt; &gt;&gt;&gt; &lt;&lt;</li>
+<li>Comparison == &gt; &lt; &gt;= &lt;=</li>
+<li>instanceof</li>
+<li>Grouping ()</li>
+<li>Literals - character, String, numeric, null</li>
+<li>Cast</li>
+<li>Method calls</li>
+<li>Field access</li>
+<li>Array access []</li>
+<li>Ternary operator ?:</li>
+</ul>
+<h1 id="u524D_u666F_u548C_u5C55_u671B"><a href="#u524D_u666F_u548C_u5C55_u671B" class="headerlink" title="前景和展望"></a>前景和展望</h1><ul>
+<li>目前Android Databinding还只支持单向绑定，试想未来是否能像Angular.Js一样支持双向绑定呢？</li>
+<li>由于目前Android Data Binding还是测试版，<a href="https://github.com/facebook/buck" target="_blank" rel="external">buck</a>官方说等Android Databinding升级到正式版本后才考虑对其支持</li>
+</ul>
+<p>我谷歌大法一直在与时俱进，每年的I/O大会都会给出重量级的产品，期待上述两个Features的实现，如果真是这样的话，Android不管是开发速度还是编译速度都飞速提高😀</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/19/multi-packages/" rel="next" title="Android自动化之多渠道打包">
+                <i class="fa fa-chevron-left"></i> Android自动化之多渠道打包
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/19/android-data-binding/"
+           data-title="Android Data Binding(More Xml, Less Java)" data-url="http://yoursite.com/2015/12/19/android-data-binding/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars.githubusercontent.com/u/2337950?v=3"
+               alt="David.Yu" />
+          <p class="site-author-name" itemprop="name">David.Yu</p>
+          <p class="site-description motion-element" itemprop="description">Google Fans、Android Follower</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archmages" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/archmages" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/archmages" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> Zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#u80CC_u666F"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Data_Binding_u6709_u4EC0_u4E48_u4F5C_u7528"><span class="nav-number">2.</span> <span class="nav-text">Data Binding有什么作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Data_Binding_u7684_u9700_u6C42_u4E0E_u652F_u6301"><span class="nav-number">3.</span> <span class="nav-text">Data Binding的需求与支持</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u9700_u6C42"><span class="nav-number">3.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u652F_u6301"><span class="nav-number">3.2.</span> <span class="nav-text">支持</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5982_u4F55_u4F7F_u7528Data_Binding"><span class="nav-number">4.</span> <span class="nav-text">如何使用Data Binding</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u914D_u7F6E"><span class="nav-number">4.1.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle__u63D2_u4EF6_u4E3A1-3_u7684_u914D_u7F6E"><span class="nav-number">4.1.1.</span> <span class="nav-text">Gradle 插件为1.3的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle__u63D2_u4EF6_u4E3A1-5-+_u7684_u914D_u7F6E_uFF1A"><span class="nav-number">4.1.2.</span> <span class="nav-text">Gradle 插件为1.5.+的配置：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4F7F_u7528_u6D41_u7A0B"><span class="nav-number">4.2.</span> <span class="nav-text">使用流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u7B2C_u4E00_u6B65_uFF1A_u521B_u5EFAXML"><span class="nav-number">4.2.1.</span> <span class="nav-text">第一步：创建XML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7B2C_u4E8C_u6B65_uFF1A_u5B9A_u4E49_u6570_u636E"><span class="nav-number">4.2.2.</span> <span class="nav-text">第二步：定义数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7B2C_u4E09_u6B65_uFF1A_u7ED1_u5B9A_u6570_u636E"><span class="nav-number">4.2.3.</span> <span class="nav-text">第三步：绑定数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Data_Binding_u4F7F_u7528_u4E4B_u8BE6_u7EC6_u4ECB_u7ECD"><span class="nav-number">5.</span> <span class="nav-text">Data Binding使用之详细介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4F7F_u7528_u7C7B_u65B9_u6CD5"><span class="nav-number">5.0.1.</span> <span class="nav-text">使用类方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7C7B_u578B_u522B_u540D"><span class="nav-number">5.0.2.</span> <span class="nav-text">类型别名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Null_Coalescing_u8FD0_u7B97_u7B26"><span class="nav-number">5.0.3.</span> <span class="nav-text">Null Coalescing运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4F7F_u7528_u5C5E_u6027_u503C"><span class="nav-number">5.0.4.</span> <span class="nav-text">使用属性值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4F7F_u7528_u8D44_u6E90_u6570_u636E"><span class="nav-number">5.0.5.</span> <span class="nav-text">使用资源数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5E26ID_u7684View"><span class="nav-number">5.0.6.</span> <span class="nav-text">带ID的View</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List_View_Item"><span class="nav-number">5.0.7.</span> <span class="nav-text">List View Item</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Includes"><span class="nav-number">5.0.8.</span> <span class="nav-text">Includes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7A7A_u6307_u9488_u5B89_u5168"><span class="nav-number">5.0.9.</span> <span class="nav-text">空指针安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collections"><span class="nav-number">5.0.10.</span> <span class="nav-text">Collections</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8868_u8FBE_u5F0F"><span class="nav-number">5.0.11.</span> <span class="nav-text">表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Data_Binding_u652F_u6301_u5E38_u7528_u8868_u8FBE_u5F0F_uFF1A"><span class="nav-number">5.0.11.0.1.</span> <span class="nav-text">Data Binding支持常用表达式：</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u524D_u666F_u548C_u5C55_u671B"><span class="nav-number">6.</span> <span class="nav-text">前景和展望</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David.Yu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"archmage"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>
