@@ -1,0 +1,807 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,WorkFlow," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
+
+
+
+
+
+
+<meta name="description" content="前言最近项目进度比较轻松，闲来自己研究一些感兴趣的技术，恰好这两天研究了一下Travic CI, 用于Android持续集成以及自动打包，话不多说，下面大家就跟我一起踏入Travis CI的奇妙旅行
+背景我们在开发Android项目的时候，大致的流程是这样：
+ Question:这些步骤能否简化，能否自动化？懒是码农的美德，作为资深码农应该善于用工具提高自己的工作效率，能自动化的要自动化。那么今天">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Travis CI搭建Android持续集成以及自动打包发布流程">
+<meta property="og:url" content="http://yoursite.com/2015/12/23/Travis-CI-Integration/index.html">
+<meta property="og:site_name" content="Archmage's Temple">
+<meta property="og:description" content="前言最近项目进度比较轻松，闲来自己研究一些感兴趣的技术，恰好这两天研究了一下Travic CI, 用于Android持续集成以及自动打包，话不多说，下面大家就跟我一起踏入Travis CI的奇妙旅行
+背景我们在开发Android项目的时候，大致的流程是这样：
+ Question:这些步骤能否简化，能否自动化？懒是码农的美德，作为资深码农应该善于用工具提高自己的工作效率，能自动化的要自动化。那么今天">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/53488390gw1ez9ot3wk0gj20n9035jrl.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/53488390gw1ez9oxznunij20dn02nmx7.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/53488390gw1ez9p2xvghdj20ta075wfo.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/53488390gw1ez9p4o2ditj20ip04u3yt.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/53488390gw1ez9p65tr44j20c702jdfs.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/53488390gw1ez9pd2vprxj214z099gmn.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/53488390gw1ez9pj994d4j215b03smxj.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/53488390gw1ez9puwis5fj215b02vwep.jpg">
+<meta property="og:updated_time" content="2015-12-23T09:57:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于Travis CI搭建Android持续集成以及自动打包发布流程">
+<meta name="twitter:description" content="前言最近项目进度比较轻松，闲来自己研究一些感兴趣的技术，恰好这两天研究了一下Travic CI, 用于Android持续集成以及自动打包，话不多说，下面大家就跟我一起踏入Travis CI的奇妙旅行
+背景我们在开发Android项目的时候，大致的流程是这样：
+ Question:这些步骤能否简化，能否自动化？懒是码农的美德，作为资深码农应该善于用工具提高自己的工作效率，能自动化的要自动化。那么今天">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 基于Travis CI搭建Android持续集成以及自动打包发布流程 | Archmage's Temple </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?da710790a496bc89a396c9df47db0d72";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Archmage's Temple</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">追求卓越</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于Travis CI搭建Android持续集成以及自动打包发布流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-23T16:36:39+08:00" content="2015-12-23">
+              2015-12-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/23/Travis-CI-Integration/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/23/Travis-CI-Integration/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="u524D_u8A00"><a href="#u524D_u8A00" class="headerlink" title="前言"></a>前言</h2><p>最近项目进度比较轻松，闲来自己研究一些感兴趣的技术，恰好这两天研究了一下Travic CI, 用于Android持续集成以及自动打包，话不多说，下面大家就跟我一起踏入Travis CI的奇妙旅行</p>
+<h2 id="u80CC_u666F"><a href="#u80CC_u666F" class="headerlink" title="背景"></a>背景</h2><p>我们在开发Android项目的时候，大致的流程是这样：<br><img src="http://ww3.sinaimg.cn/large/53488390gw1ez9ot3wk0gj20n9035jrl.jpg" alt="image"></p>
+<p> <code>Question:这些步骤能否简化，能否自动化？</code><br>懒是码农的美德，作为资深码农应该善于用工具提高自己的工作效率，能自动化的要自动化。那么今天要讲的Travis CI就能简化我们的工作，上述流程如果使用Travis CI那么工作流程是这样的：<br><img src="http://ww2.sinaimg.cn/large/53488390gw1ez9oxznunij20dn02nmx7.jpg" alt="image"><br>Tag提交后，Travis CI会自动编译代码，生成apk文件，并发到Github和相应地其他渠道（fir.im, 蒲公英等），分发完成后，会邮件通知参与测试的人员。如此一来，作为码农，只要安心Coding和打Tag就好了，轻松愉快啊😄,下面我们就来着重介绍Travis  </p>
+<h2 id="u4EC0_u4E48_u662FTravis_CI"><a href="#u4EC0_u4E48_u662FTravis_CI" class="headerlink" title="什么是Travis CI"></a>什么是<a href="https://github.com/integrations/travis-ci" target="_blank" rel="external">Travis CI</a></h2><p>简单来说它是用来做持续集成的工具，可以为你自动构建、测试、打包等等，极大的简化了工作流程。它对Github的支持特别好，链接到你在Github上的项目以后，每当你把测试通过后的代码提交到master去，它会pull你的代码并按照你的要求构建执行  </p>
+<h2 id="u5982_u4F55_u5B89_u88C5Travis_CI"><a href="#u5982_u4F55_u5B89_u88C5Travis_CI" class="headerlink" title="如何安装Travis CI"></a>如何安装Travis CI</h2><p>首先需要安装Ruby, 你可以通过运行<code>ruby -v</code> 检查系统是否安装Ruby:    </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ruby -v</span><br><span class="line">ruby <span class="number">2.0</span><span class="number">.0</span>p645 (<span class="number">2015</span>-<span class="number">04</span>-<span class="number">13</span> revision <span class="number">50299</span>) [universal.x86_64-darwin15]</span><br></pre></td></tr></table></figure>
+<p>然后运行：  </p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gem install travis -<span class="keyword">v</span> <span class="number">1.8</span>.<span class="number">0</span> --<span class="keyword">no</span>-rdoc --<span class="keyword">no</span>-<span class="keyword">ri</span></span><br></pre></td></tr></table></figure>
+<p>安装完毕后，检验一下：  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ travis version</span><br><span class="line"><span class="number">1.8</span><span class="number">.0</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="u914D_u7F6EAndroid_u9879_u76EE_uFF0C_u542F_u7528Travis_CI"><a href="#u914D_u7F6EAndroid_u9879_u76EE_uFF0C_u542F_u7528Travis_CI" class="headerlink" title="配置Android项目，启用Travis CI"></a>配置Android项目，启用Travis CI</h2><h3 id="u5148_u6DFB_u52A0Travis_CI_u5230Github_repo_3A"><a href="#u5148_u6DFB_u52A0Travis_CI_u5230Github_repo_3A" class="headerlink" title="先添加Travis CI到Github repo:"></a>先添加Travis CI到Github repo:</h3><p><img src="http://ww4.sinaimg.cn/large/53488390gw1ez9p2xvghdj20ta075wfo.jpg" alt="image">  </p>
+<h3 id="u7136_u540E_u6309_u7167_u5B98_u7F51_u8BF4_u6CD5_u662F_u5927_u81F4_u4E09_u6B65_u8D70_uFF1A"><a href="#u7136_u540E_u6309_u7167_u5B98_u7F51_u8BF4_u6CD5_u662F_u5927_u81F4_u4E09_u6B65_u8D70_uFF1A" class="headerlink" title="然后按照官网说法是大致三步走："></a>然后按照官网说法是大致三步走：</h3><p><img src="http://ww4.sinaimg.cn/large/53488390gw1ez9p4o2ditj20ip04u3yt.jpg" alt="image">  </p>
+<h4 id="u5148_u9009_u62E9_u8981_u5F00_u542FTravis_CI_u7684_u9879_u76EE_uFF0C_u5C06_u5F00_u5173_u8BBE_u4E3AOn_u5373_u53EF_uFF1A"><a href="#u5148_u9009_u62E9_u8981_u5F00_u542FTravis_CI_u7684_u9879_u76EE_uFF0C_u5C06_u5F00_u5173_u8BBE_u4E3AOn_u5373_u53EF_uFF1A" class="headerlink" title="先选择要开启Travis CI的项目，将开关设为On即可："></a>先选择要开启Travis CI的项目，将开关设为On即可：</h4><p><img src="http://ww1.sinaimg.cn/large/53488390gw1ez9p65tr44j20c702jdfs.jpg" alt="image">  </p>
+<h4 id="u5728_u9879_u76EE_u7684_u6839_u76EE_u5F55_u4E0B_u65B0_u5EFA_u4E00_u4E2A_u6587_u4EF6-travis-yml_uFF0C_u5982_u4E0B_u662F_u4E00_u4E2AAndroid__u9879_u76EE_u7684_u914D_u7F6E_u6A21_u677F_uFF1A"><a href="#u5728_u9879_u76EE_u7684_u6839_u76EE_u5F55_u4E0B_u65B0_u5EFA_u4E00_u4E2A_u6587_u4EF6-travis-yml_uFF0C_u5982_u4E0B_u662F_u4E00_u4E2AAndroid__u9879_u76EE_u7684_u914D_u7F6E_u6A21_u677F_uFF1A" class="headerlink" title="在项目的根目录下新建一个文件.travis.yml，如下是一个Android 项目的配置模板："></a>在项目的根目录下新建一个文件.travis.yml，如下是一个Android 项目的配置模板：</h4><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">language: android</span><br><span class="line"><span class="title">android:</span></span><br><span class="line">  components:</span><br><span class="line">    <span class="comment"># Uncomment the lines below if you want to</span></span><br><span class="line">    <span class="comment"># use the latest revision of Android SDK Tools</span></span><br><span class="line">    <span class="comment"># - platform-tools</span></span><br><span class="line">    <span class="comment"># - tools</span></span><br><span class="line">    <span class="comment"># The BuildTools version used by your project</span></span><br><span class="line">    - build-tools-19.1.0</span><br><span class="line">    <span class="comment"># The SDK version used to compile your project</span></span><br><span class="line">    - android-19</span><br><span class="line">    <span class="comment"># Additional components</span></span><br><span class="line">    - extra-google-google_play_services</span><br><span class="line">    - extra-google-m2repository</span><br><span class="line">    - extra-android-m2repository</span><br><span class="line">    - addon-google_apis-google-19</span><br><span class="line">    <span class="comment"># Specify at least one system image,</span></span><br><span class="line">    <span class="comment"># if you need to run emulator(s) during your tests</span></span><br><span class="line">    - sys-img-armeabi-v7a-android-19</span><br><span class="line">    - sys-img-x86-android-17</span><br></pre></td></tr></table></figure>
+<p>当Travis CI准备好我们所需要的环境后，将自动运行yml文件<code>script</code>部分所设置的指令，上例中运行的是<code>./gradlew assembleRelease</code>，运行成功的话会在项目的主模块下生成<code>build/outputs/apk/app-release.apk</code>   </p>
+<p><strong>【备注】</strong>Travis CI目前有2个网站：如果是开源项目，直接进入travis-ci.org即可，如果是私有付费项目，则需要进入travis-ci.com，2个网站除了域名外所有的界面及操作几乎一模一样  </p>
+<h2 id="Android_u9879_u76EE_u81EA_u52A8_u5316_u6784_u5EFA_u7684_u5BC6_u7801_u548C_u8BC1_u4E66_u5B89_u5168_u95EE_u9898"><a href="#Android_u9879_u76EE_u81EA_u52A8_u5316_u6784_u5EFA_u7684_u5BC6_u7801_u548C_u8BC1_u4E66_u5B89_u5168_u95EE_u9898" class="headerlink" title="Android项目自动化构建的密码和证书安全问题"></a>Android项目自动化构建的密码和证书安全问题</h2><p>安卓项目发布需要证书文件和若干密码，但无论是开源项目还是私有项目，<strong>任何时候都不应该将原始证书或密码放入代码库（原则上来讲证书和密码也不应该交于开发人员，而应该只能通过发布服务器进行编译）</strong>。Travis CI为此提供了2种解决方案，一种是对敏感信息、密码、证书等进行对称加密，在CI构建环境时解密，另一种是将密码等通过Travis CI的控制台（即网站）设置为构建时的环境变量。  </p>
+<p>由于前者会在Travis控制台生成一对环境变量，所以我的做法是尽量选择后者，但由于Travis控制台无法上传文件，因此涉及到文件加密的部分，则只能选择前者。<br>说了这么多，首先还是需要先对编译脚本进行改造，如果不考虑安全问题，项目的<code>build.gradle</code>文件可能会是这样：    </p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">android</span> &#123;</span><br><span class="line">    <span class="title">signingConfigs</span> &#123;</span><br><span class="line">        <span class="title">releaseConfig</span> &#123;</span><br><span class="line">            <span class="title">storeFile</span> file(<span class="string">"../xx.keystore"</span>)</span><br><span class="line">            storePassword <span class="string">"123456"</span></span><br><span class="line">            keyAlias <span class="string">"key_alias"</span></span><br><span class="line">            keyPassword <span class="string">"123456"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        <span class="title">release</span> &#123;</span><br><span class="line">            <span class="title">minifyEnabled</span> <span class="built_in">false</span></span><br><span class="line">            proguardFiles getDefaultProguardFile(<span class="string">'proguard-android.txt'</span>), <span class="string">'proguard-rules.pro'</span></span><br><span class="line">            signingConfig signingConfigs.releaseConfig</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而我们最终要的效果，还是希望一份编译脚本既可以用于开发环境，也可以在CI环境下使用，在Travis CI中，可以通过点击项目名称 -&gt; Settings -&gt; Environment Variables中设置环境变量，比如我们可以针对上面的配置，分别设置KEYSTORE_PASS、ALIAS_NAME、ALIAS_PASS三个环境变量:<br><img src="http://ww4.sinaimg.cn/large/53488390gw1ez9pd2vprxj214z099gmn.jpg" alt="image"><br>在Travis CI环境下可以通过<code>System.getenv()</code>获得这些环境变量<br>本地开发环境中，我的做法是将这几个变量加到<code>gradle.properties</code>文件中，这样就可以在<code>build.gradle</code>内直接使用了。下面是开发环境的<code>gradle.properties</code>:     </p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="setting">KEYSTORE_PASS=<span class="value"><span class="number">123456</span></span></span></span><br><span class="line"><span class="setting">ALIAS_NAME=<span class="value">key_alias</span></span></span><br><span class="line"><span class="setting">ALIAS_PASS=<span class="value"><span class="number">123456</span></span></span></span><br></pre></td></tr></table></figure>
+<p>这样一来<code>build.gradle</code>就变成了:    </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">releaseConfig &#123;</span><br><span class="line">            storeFile file(<span class="string">"../xx.keystore"</span>)</span><br><span class="line">            storePassword project.hasProperty(<span class="string">"KEYSTORE_PASS"</span>) ? KEYSTORE_PASS : System.getenv(<span class="string">"KEYSTORE_PASS"</span>)</span><br><span class="line">            keyAlias project.hasProperty(<span class="string">"ALIAS_NAME"</span>) ? ALIAS_NAME : System.getenv(<span class="string">"ALIAS_NAME"</span>)</span><br><span class="line">            keyPassword project.hasProperty(<span class="string">"ALIAS_PASS"</span>) ? ALIAS_PASS : System.getenv(<span class="string">"ALIAS_PASS"</span>)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>接下来处理证书文件，为了方便文件加密等功能，Travis CI提供了一个基于ruby的CLI命令行工具，可以直接使用gem安装:    </p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem <span class="keyword">install</span> travis</span><br></pre></td></tr></table></figure>
+<p>安装后进入安卓项目根目录，尝试对证书文件加密：    </p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">travis <span class="built_in">encrypt</span>-<span class="built_in">file</span> xx.keystore <span class="comment">--add</span></span><br></pre></td></tr></table></figure>
+<p>travis encrypt-file指令会做几件事情:<br>1.在Travis CI控制台自动生成一对密钥: <code>encrypted_59c5087c0788_key</code>和<code>encrypted_59c5087c0788_iv</code><br><img src="http://ww1.sinaimg.cn/large/53488390gw1ez9pj994d4j215b03smxj.jpg" alt="image"><br>2.基于密钥通过openssl对文件进行加密，上例中会项目根目录生成<code>xx.keystore.enc</code>文件<br>3.在.travis.yml中自动生成Travis CI环境下解密文件的配置，上例运行后可以看到.travis.yml中多了几行：    </p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">before_install:</span><br><span class="line">- gem install fir-cli</span><br><span class="line">- openssl aes-<span class="number">256</span>-cbc -K <span class="variable">$encrypted</span>_59c5087c0788_key -iv <span class="variable">$encrypted</span>_59c5087c0788_iv</span><br><span class="line">  -<span class="keyword">in</span> xx.keystore.enc -out xx.keystore -d</span><br></pre></td></tr></table></figure>
+<p>最后在<code>.gitignore</code>中忽略<code>xx.keystore</code>以及<code>gradle.properties</code>  </p>
+<h2 id="Travis_Ci_u81EA_u52A8_u53D1_u5E03_u5B89_u88C5apk_u6587_u4EF6_u5230Github_Release"><a href="#Travis_Ci_u81EA_u52A8_u53D1_u5E03_u5B89_u88C5apk_u6587_u4EF6_u5230Github_Release" class="headerlink" title="Travis Ci自动发布安装apk文件到Github Release"></a>Travis Ci自动发布安装apk文件到Github Release</h2><p>Travis CI的script部分运行成功后，可以通过配置文件进入到发布阶段。下面是一个Travis CI发布的示例：  </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">deploy</span>:</span><br><span class="line">  <span class="attribute">provider</span>: releases</span><br><span class="line">  <span class="attribute">user</span>: <span class="string">"GITHUB USERNAME"</span></span><br><span class="line">  <span class="attribute">password</span>: <span class="string">"GITHUB PASSWORD"</span></span><br><span class="line">  <span class="attribute">file</span>: app/build/outputs/apk/app-release.apk</span><br><span class="line">  <span class="attribute">skip_cleanup</span>: true</span><br><span class="line">  <span class="attribute">on</span>:</span><br><span class="line">    <span class="attribute">tags</span>: true</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>provider：</code>发布目标为Github Release</li>
+<li>Github用户名和密码，因为Travis CI要上传APK文件，因此需要有Github项目的写入权限</li>
+<li><code>file</code>： 发布文件，输入文件路径即可</li>
+<li><code>skip_cleanup</code>: 默认情况下Travis CI在完成编译后会清除所有生成的文件，因此需要将skip_cleanup设置为true来忽略此操作。</li>
+<li><code>on</code>： 发布的时机，这里配置为<code>tags: true</code>，即只在有tag的情况下才发布。    </li>
+</ul>
+<p>这边直接暴露了Github密码是我们更加不能接受的。更好的做法是在Github -&gt; settings -&gt; Personal access tokens 生成一个只能访问当前项目并只有读取权限的Github Access Token，并通过Travis CI将Access Token加密。好在Travis CLI中已经可以通过一行指令做好这一切：    </p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">travis</span> setup release</span><br></pre></td></tr></table></figure>
+<p>根据提示填写上述配置项目的信息后，Travis CLI会自动在.travis.yml文件中生成好所有的配置项：    </p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">deploy</span>:</span><br><span class="line">  <span class="attribute">provider</span>: releases</span><br><span class="line">  <span class="attribute">api_key</span>:</span><br><span class="line">    <span class="attribute">secure</span>: XXX</span><br><span class="line">  <span class="attribute">file</span>: app/build/outputs/apk/app-release.apk</span><br><span class="line">  <span class="attribute">skip_cleanup</span>: true</span><br><span class="line">  <span class="attribute">on</span>:</span><br><span class="line">    <span class="attribute">tags</span>: true</span><br><span class="line">    <span class="attribute">all_branches</span>: true</span><br></pre></td></tr></table></figure>
+<p>其中api_key下的secure就是加密后的Access Token。  </p>
+<h2 id="u81EA_u52A8_u53D1_u5E03APK_u5230fir-im"><a href="#u81EA_u52A8_u53D1_u5E03APK_u5230fir-im" class="headerlink" title="自动发布APK到fir.im"></a>自动发布APK到fir.im</h2><p>自动发布到Github对于开发人员已经足够，但是考虑到项目实际需要以及国情，还是有必要选择一个国内的App分发服务，fir.im是不错的选择，不但允许游客下载，还提供了二维码等更适合对接手机的功能，国内下载速度也很快。由于fir.im提供了比较方便的CLI工具，因此本文以fir.im为例，在.travis.yml中添加以下几行：    </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">before_install:</span><br><span class="line">- gem <span class="operator"><span class="keyword">install</span> fir-cli</span><br><span class="line">after_deploy:</span><br><span class="line">- fir <span class="keyword">p</span> app/<span class="keyword">build</span>/outputs/apk/app-<span class="keyword">release</span>.apk -<span class="keyword">T</span> $FIR_TOKEN -<span class="keyword">c</span> <span class="string">"`git cat-file tag $TRAVIS_TAG`"</span></span></span><br></pre></td></tr></table></figure>
+<p>即在环境构建阶段安装fir-cli，在发布成功后通过fir命令行工具将apk上传到fir。<br>其中$FIR_TOKEN可以在fir.im的用户-&gt;API Token中找到，然后在Travis CI控制台中创建环境变量FIR_TOKEN并粘贴即可。<br><img src="http://ww4.sinaimg.cn/large/53488390gw1ez9puwis5fj215b02vwep.jpg" alt="image">  </p>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><p>其实所有的yml文件配置不到30行，就能利用Travis CI进行自动化持续集成和打包。最后我们回顾一下Travis CI的工作流：<br>提交代码：    </p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">git</span> <span class="keyword">add </span>.</span><br><span class="line"><span class="label">git</span> commit -m <span class="string">"注释"</span></span><br><span class="line"><span class="label">git</span> <span class="keyword">push </span>origin</span><br></pre></td></tr></table></figure>
+<p>打Tag:    </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git tag -a v0<span class="number">.0</span><span class="number">.1</span>-alpha<span class="number">.1</span> -m <span class="string">"Tag注释，说清楚这个版本的主要改动，也可以省略-m参数直接写长文本"</span></span><br><span class="line">git push origin --tags</span><br></pre></td></tr></table></figure>
+<p>这个是我集成了Travis CI的项目地址，供参考：<br><a href="https://github.com/archmages/DYWeather" target="_blank" rel="external">https://github.com/archmages/DYWeather</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/WorkFlow/" rel="tag">#WorkFlow</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/19/android-data-binding/" rel="next" title="Android Data Binding(More Xml, Less Java)">
+                <i class="fa fa-chevron-left"></i> Android Data Binding(More Xml, Less Java)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/23/Travis-CI-Integration/"
+           data-title="基于Travis CI搭建Android持续集成以及自动打包发布流程" data-url="http://yoursite.com/2015/12/23/Travis-CI-Integration/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars.githubusercontent.com/u/2337950?v=3"
+               alt="David.Yu" />
+          <p class="site-author-name" itemprop="name">David.Yu</p>
+          <p class="site-description motion-element" itemprop="description">Google Fans、Android Follower</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archmages" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/archmages" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/archmages" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> Zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u524D_u8A00"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u80CC_u666F"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4EC0_u4E48_u662FTravis_CI"><span class="nav-number">3.</span> <span class="nav-text">什么是Travis CI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5982_u4F55_u5B89_u88C5Travis_CI"><span class="nav-number">4.</span> <span class="nav-text">如何安装Travis CI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u914D_u7F6EAndroid_u9879_u76EE_uFF0C_u542F_u7528Travis_CI"><span class="nav-number">5.</span> <span class="nav-text">配置Android项目，启用Travis CI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u5148_u6DFB_u52A0Travis_CI_u5230Github_repo_3A"><span class="nav-number">5.1.</span> <span class="nav-text">先添加Travis CI到Github repo:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7136_u540E_u6309_u7167_u5B98_u7F51_u8BF4_u6CD5_u662F_u5927_u81F4_u4E09_u6B65_u8D70_uFF1A"><span class="nav-number">5.2.</span> <span class="nav-text">然后按照官网说法是大致三步走：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#u5148_u9009_u62E9_u8981_u5F00_u542FTravis_CI_u7684_u9879_u76EE_uFF0C_u5C06_u5F00_u5173_u8BBE_u4E3AOn_u5373_u53EF_uFF1A"><span class="nav-number">5.2.1.</span> <span class="nav-text">先选择要开启Travis CI的项目，将开关设为On即可：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u5728_u9879_u76EE_u7684_u6839_u76EE_u5F55_u4E0B_u65B0_u5EFA_u4E00_u4E2A_u6587_u4EF6-travis-yml_uFF0C_u5982_u4E0B_u662F_u4E00_u4E2AAndroid__u9879_u76EE_u7684_u914D_u7F6E_u6A21_u677F_uFF1A"><span class="nav-number">5.2.2.</span> <span class="nav-text">在项目的根目录下新建一个文件.travis.yml，如下是一个Android 项目的配置模板：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android_u9879_u76EE_u81EA_u52A8_u5316_u6784_u5EFA_u7684_u5BC6_u7801_u548C_u8BC1_u4E66_u5B89_u5168_u95EE_u9898"><span class="nav-number">6.</span> <span class="nav-text">Android项目自动化构建的密码和证书安全问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Travis_Ci_u81EA_u52A8_u53D1_u5E03_u5B89_u88C5apk_u6587_u4EF6_u5230Github_Release"><span class="nav-number">7.</span> <span class="nav-text">Travis Ci自动发布安装apk文件到Github Release</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u81EA_u52A8_u53D1_u5E03APK_u5230fir-im"><span class="nav-number">8.</span> <span class="nav-text">自动发布APK到fir.im</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David.Yu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"archmage"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>
