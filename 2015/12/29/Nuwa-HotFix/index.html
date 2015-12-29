@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android," />
+  <meta name="keywords" content="Android,自动化," />
 
 
 
@@ -57,17 +57,24 @@
 
 
 
-<meta name="description" content="概述每当发新版本的时候，Android客户端会分发到各大市场，比如：豌豆荚，91，小米等。为了统计这些市场的效果（活跃度，下载量等），需要有一种方法唯一标识它们。每次发版本，产品部都会提供一个渠道列表，Android开发者会根据这些渠道相应地生成渠道包，随着渠道越来越多，客户端如果都是机械手动去打的话，会累死，程序猿都是聪明而懒惰的，客户端打渠道包的方法一直在演进和提高。从美团技术博客上有一篇介绍">
+<meta name="description" content="What–什么是HotFixHotFix是针对某一个具体的系统漏洞或安全问题而发布的专门解决该漏洞或安全问题的小程序，通常称为修补程序
+Why–为什么我们要用HotFix试想这样一个场景：当Android发布App之后，如果突然发现了一个严重bug，而这个bug需要进行紧急修复
+这时候我们通常的处理流程是：解决bug、重新打包App、测试、向各个应用市场和渠道换包、提示用户升级、用户下载、覆盖安装">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android自动化之多渠道打包">
-<meta property="og:url" content="http://yoursite.com/2015/12/19/multi-packages/index.html">
+<meta property="og:title" content="基于Nuwa实现Android自动化HotFix">
+<meta property="og:url" content="http://yoursite.com/2015/12/29/Nuwa-HotFix/index.html">
 <meta property="og:site_name" content="Archmage's Temple">
-<meta property="og:description" content="概述每当发新版本的时候，Android客户端会分发到各大市场，比如：豌豆荚，91，小米等。为了统计这些市场的效果（活跃度，下载量等），需要有一种方法唯一标识它们。每次发版本，产品部都会提供一个渠道列表，Android开发者会根据这些渠道相应地生成渠道包，随着渠道越来越多，客户端如果都是机械手动去打的话，会累死，程序猿都是聪明而懒惰的，客户端打渠道包的方法一直在演进和提高。从美团技术博客上有一篇介绍">
-<meta property="og:image" content="http://ww2.sinaimg.cn/large/53488390gw1ez53xnbnjoj207g06a3yw.jpg">
-<meta property="og:updated_time" content="2015-12-21T03:21:25.000Z">
+<meta property="og:description" content="What–什么是HotFixHotFix是针对某一个具体的系统漏洞或安全问题而发布的专门解决该漏洞或安全问题的小程序，通常称为修补程序
+Why–为什么我们要用HotFix试想这样一个场景：当Android发布App之后，如果突然发现了一个严重bug，而这个bug需要进行紧急修复
+这时候我们通常的处理流程是：解决bug、重新打包App、测试、向各个应用市场和渠道换包、提示用户升级、用户下载、覆盖安装">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/53488390gw1ezglv9fr5hj20cn01mt98.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/53488390gw1ezgm4ubgdtj20d501kglz.jpg">
+<meta property="og:updated_time" content="2015-12-29T11:48:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android自动化之多渠道打包">
-<meta name="twitter:description" content="概述每当发新版本的时候，Android客户端会分发到各大市场，比如：豌豆荚，91，小米等。为了统计这些市场的效果（活跃度，下载量等），需要有一种方法唯一标识它们。每次发版本，产品部都会提供一个渠道列表，Android开发者会根据这些渠道相应地生成渠道包，随着渠道越来越多，客户端如果都是机械手动去打的话，会累死，程序猿都是聪明而懒惰的，客户端打渠道包的方法一直在演进和提高。从美团技术博客上有一篇介绍">
+<meta name="twitter:title" content="基于Nuwa实现Android自动化HotFix">
+<meta name="twitter:description" content="What–什么是HotFixHotFix是针对某一个具体的系统漏洞或安全问题而发布的专门解决该漏洞或安全问题的小程序，通常称为修补程序
+Why–为什么我们要用HotFix试想这样一个场景：当Android发布App之后，如果突然发现了一个严重bug，而这个bug需要进行紧急修复
+这时候我们通常的处理流程是：解决bug、重新打包App、测试、向各个应用市场和渠道换包、提示用户升级、用户下载、覆盖安装">
 
 
 
@@ -85,7 +92,7 @@
   };
 </script>
 
-  <title> Android自动化之多渠道打包 | Archmage's Temple </title>
+  <title> 基于Nuwa实现Android自动化HotFix | Archmage's Temple </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -213,7 +220,7 @@
             
             
               
-                Android自动化之多渠道打包
+                基于Nuwa实现Android自动化HotFix
               
             
           </h1>
@@ -225,8 +232,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-12-19T17:41:17+08:00" content="2015-12-19">
-              2015-12-19
+            <time itemprop="dateCreated" datetime="2015-12-29T17:35:55+08:00" content="2015-12-29">
+              2015-12-29
             </time>
           </span>
 
@@ -255,8 +262,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/19/multi-packages/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/19/multi-packages/" itemprop="commentsCount"></span>
+                <a href="/2015/12/29/Nuwa-HotFix/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/29/Nuwa-HotFix/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -277,9 +284,51 @@
       
 
       
-        <h2 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h2><p>每当发新版本的时候，Android客户端会分发到各大市场，比如：豌豆荚，91，小米等。为了统计这些市场的效果（活跃度，下载量等），需要有一种方法唯一标识它们。<br>每次发版本，产品部都会提供一个渠道列表，Android开发者会根据这些渠道相应地生成渠道包，随着渠道越来越多，客户端如果都是机械手动去打的话，会累死，程序猿都是聪明而懒惰的，客户端打渠道包的方法一直在演进和提高。<br>从美团技术博客上有一篇介绍自动打包的博文，结合我自己的项目，我就对META-INF自动化打包作一下描述。<br>我们首先需要用工具（IDE、maven、ant等等）打一个签名包，这个包作为母包，用来打各个渠道包用。这个包我们用解压缩工具打开，发现根目录会有一个META-INF目录，如下图所示<br><img src="http://ww2.sinaimg.cn/large/53488390gw1ez53xnbnjoj207g06a3yw.jpg" alt="image"><br><a id="more"></a></p>
-<h2 id="u6DFB_u52A0_u7A7A_u6587_u4EF6"><a href="#u6DFB_u52A0_u7A7A_u6587_u4EF6" class="headerlink" title="添加空文件"></a>添加空文件</h2><p>如果在META-INF目录内添加空文件，可以不用重新签名应用。因此，通过为不同渠道的应用添加不同的空文件，可以唯一标识一个渠道。<br>首先建立一个空目录(这边命名位packages), 将上面生成好的签名包拷贝至packages<br>在packages目录下新建一个渠道包配置文件(命名为channel_cfg)，每个渠道id为一行，如下：</p>
-<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">360</span></span><br><span class="line">wandoujia</span><br><span class="line">xiaomi</span><br><span class="line"><span class="number">91</span></span><br><span class="line">```   </span><br><span class="line">## Python脚本编写</span><br><span class="line">新建一个python脚本，用来给apk添加空的渠道文件，渠道名的前缀为mchannel_,如下是我的python脚本：  </span><br><span class="line">  </span><br><span class="line">```  </span><br><span class="line">#！/usr/bin/env python</span><br><span class="line"><span class="keyword">import</span> zipfile</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">'channel_cfg'</span>, <span class="string">'r'</span>);</span><br><span class="line"><span class="keyword">while</span> True:</span><br><span class="line">    <span class="built_in">line</span> = f.readline().strip(<span class="string">'\n'</span>)</span><br><span class="line">    <span class="keyword">if</span> len(<span class="built_in">line</span>) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        shutil.copy2(&#123;your_apk&#125;, <span class="string">'target'</span> + <span class="built_in">line</span> + <span class="string">'.apk'</span>)</span><br><span class="line">        zipped = zipfile.ZipFile(<span class="string">'target'</span> + <span class="built_in">line</span> + <span class="string">'.apk'</span>, <span class="string">'a'</span>, zipfile.ZIP_DEFLATED)</span><br><span class="line">	empty_channel_file = <span class="string">"META-INF/mchannel_&#123;channel&#125;"</span>.format(channel=<span class="built_in">line</span>)</span><br><span class="line">	fp = <span class="built_in">open</span>(<span class="built_in">line</span>, <span class="string">'w'</span>)</span><br><span class="line">	zipped.write(os.path.basename(<span class="built_in">line</span>), empty_channel_file)</span><br><span class="line">	fp.close</span><br><span class="line">	os.remove(<span class="built_in">line</span>)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+        <h1 id="What_u2013_u4EC0_u4E48_u662FHotFix"><a href="#What_u2013_u4EC0_u4E48_u662FHotFix" class="headerlink" title="What–什么是HotFix"></a>What–什么是HotFix</h1><p>HotFix是针对某一个具体的系统漏洞或安全问题而发布的专门解决该漏洞或安全问题的小程序，通常称为修补程序</p>
+<h1 id="Why_u2013_u4E3A_u4EC0_u4E48_u6211_u4EEC_u8981_u7528HotFix"><a href="#Why_u2013_u4E3A_u4EC0_u4E48_u6211_u4EEC_u8981_u7528HotFix" class="headerlink" title="Why–为什么我们要用HotFix"></a>Why–为什么我们要用HotFix</h1><p>试想这样一个场景：当Android发布App之后，如果突然发现了一个严重bug，而这个bug需要进行紧急修复</p>
+<p>这时候我们通常的处理流程是：解决bug、重新打包App、测试、向各个应用市场和渠道换包、提示用户升级、用户下载、覆盖安装。有时候仅仅是为了修改了一行代码，也要付出巨大的成本进行换包和重新发布。用户体验来很是糟糕</p>
+<p><code>Question: 有没有办法不重新发布App，不需要用户重新下载覆盖安装，就可以完成Bug的修复？</code></p>
+<p>答案是Yes，HotFix就是做这个事情的。Android HotFix原理介绍可以参照这里：<a href="http://zhuanlan.zhihu.com/magilu/20308548" target="_blank" rel="external">HotFix</a>  </p>
+<p>Nuwa(<a href="https://github.com/jasonross/Nuwa" target="_blank" rel="external">女娲</a>)是一个自动化的工具，基于上述原理将骤自动化了，下面我就介绍一下如何使用<br><a id="more"></a></p>
+<h1 id="How_u2013_u600E_u4E48_u7528"><a href="#How_u2013_u600E_u4E48_u7528" class="headerlink" title="How–怎么用"></a>How–怎么用</h1><h2 id="u6DFB_u52A0Gradle_Plugin"><a href="#u6DFB_u52A0Gradle_Plugin" class="headerlink" title="添加Gradle Plugin"></a>添加Gradle Plugin</h2><p>在工程的根build.gradle文件中添加</p>
+<blockquote>
+<p>classpath ‘cn.jiajixin.nuwa:gradle:1.2.2’</p>
+</blockquote>
+<p>然后我们的build.gradle文件可能长这样：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">buildscript</span> &#123;</span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">'com.android.tools.build:gradle:1.2.3'</span></span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">'cn.jiajixin.nuwa:gradle:1.2.2'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u6DFB_u52A0Nuwa_SDK"><a href="#u6DFB_u52A0Nuwa_SDK" class="headerlink" title="添加Nuwa SDK"></a>添加Nuwa SDK</h2><p>在app的build.gradle中添加依赖：</p>
+<blockquote>
+<p>apply plugin: “cn.jiajixin.nuwa”</p>
+</blockquote>
+<p>然后我们的build.gradle文件可能长这样：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: <span class="string">'libs'</span>, <span class="keyword">include</span>: [<span class="string">'*.jar'</span>])</span><br><span class="line">    testCompile <span class="string">'junit:junit:4.12'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'com.android.support:appcompat-v7:23.1.1'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'cn.jiajixin.nuwa:nuwa:1.0.0'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>【备注】</strong> 这边有个坑，2.0版本的Android Studio为了支持<code>Instant Run</code>, 默认使用的Gradle Plugin是<code>2.0.0-alpha2</code>, 如果用此版本，会报错<code>Error:Cannot get property &#39;taskDependencies&#39; on null object</code>，乖乖降低到1.2.3，木有此问题</p>
+<h2 id="u4F7F_u7528Nuwa"><a href="#u4F7F_u7528Nuwa" class="headerlink" title="使用Nuwa"></a>使用Nuwa</h2><p>1.自定义Application,并且在Application类中添加如下代码：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">attachBaseContext</span><span class="params">(Context base)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.attachBaseContext(base);</span><br><span class="line">    Nuwa.init(<span class="keyword">this</span>);</span><br><span class="line">    Nuwa.loadPatch(<span class="keyword">this</span>,<span class="string">"/sdcard/patch.jar"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.运行并安装apk，会在<code>app/build/outputs/</code>目录下自动生成一个叫<code>nuwa</code>的目录：</p>
+<p><img src="http://ww3.sinaimg.cn/large/53488390gw1ezglv9fr5hj20cn01mt98.jpg" alt=""></p>
+<p>拷贝此目录到一个指定的目录，比如：</p>
+<blockquote>
+<p>/Users/Documents/nuwa</p>
+</blockquote>
+<p>此apk目前是有bug的apk, 然后我们修复bug, 修复完毕后进入步骤3</p>
+<p>3.在修复完bug的code base下执行如下命令：</p>
+<blockquote>
+<p>./gradlew clean nuwaDebugPatch -P NuwaDir=/Users/Documents/nuwa</p>
+</blockquote>
+<p>然后在<code>app/build/outputs/nuwa/debug/</code>目录下会自动生成<code>patch.jar</code>文件：</p>
+<p><img src="http://ww2.sinaimg.cn/large/53488390gw1ezgm4ubgdtj20d501kglz.jpg" alt=""></p>
+<p><strong>此文件就是我们热部署的补丁文件</strong></p>
+<p>4.我们把补丁文件拷贝到sdcard根目录（这边只是为了测试整个hotfix流程， 自己的项目肯定是放在服务器上，我们通过代码自己去下载和存储）</p>
+<blockquote>
+<p>adb push app/build/outputs/nuwa/debug/patch.jar /sdcard/</p>
+</blockquote>
+<p>5.重新启动app，<strong>Bug Fix😀</strong></p>
+<h2 id="u4EE3_u7801_u6DF7_u6DC6"><a href="#u4EE3_u7801_u6DF7_u6DC6" class="headerlink" title="代码混淆"></a>代码混淆</h2><p>在proguard-rules.pro中添加：</p>
+<blockquote>
+<p>-keep class cn.jiajixin.nuwa.<em>* { </em>; }</p>
+</blockquote>
+<p>我写了一个简单地例子用于演示，<a href="https://github.com/archmages/HotFixSamples" target="_blank" rel="external">点此查看</a></p>
 
       
     </div>
@@ -290,6 +339,8 @@
           
             <a href="/tags/Android/" rel="tag">#Android</a>
           
+            <a href="/tags/自动化/" rel="tag">#自动化</a>
+          
         </div>
       
 
@@ -297,17 +348,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/19/tools-namespace/" rel="next" title="Android静态布局中tools命名空间的作用">
-                <i class="fa fa-chevron-left"></i> Android静态布局中tools命名空间的作用
+              <a href="/2015/12/23/Travis-CI-Integration/" rel="next" title="基于Travis CI搭建Android持续集成以及自动打包发布流程">
+                <i class="fa fa-chevron-left"></i> 基于Travis CI搭建Android持续集成以及自动打包发布流程
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/19/android-data-binding/" rel="prev" title="Android Data Binding(More Xml, Less Java)">
-                Android Data Binding(More Xml, Less Java) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -333,8 +380,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/19/multi-packages/"
-           data-title="Android自动化之多渠道打包" data-url="http://yoursite.com/2015/12/19/multi-packages/">
+      <div class="ds-thread" data-thread-key="2015/12/29/Nuwa-HotFix/"
+           data-title="基于Nuwa实现Android自动化HotFix" data-url="http://yoursite.com/2015/12/29/Nuwa-HotFix/">
       </div>
     
   </div>
@@ -451,7 +498,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u6982_u8FF0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u6DFB_u52A0_u7A7A_u6587_u4EF6"><span class="nav-number">2.</span> <span class="nav-text">添加空文件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#What_u2013_u4EC0_u4E48_u662FHotFix"><span class="nav-number">1.</span> <span class="nav-text">What–什么是HotFix</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Why_u2013_u4E3A_u4EC0_u4E48_u6211_u4EEC_u8981_u7528HotFix"><span class="nav-number">2.</span> <span class="nav-text">Why–为什么我们要用HotFix</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How_u2013_u600E_u4E48_u7528"><span class="nav-number">3.</span> <span class="nav-text">How–怎么用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u6DFB_u52A0Gradle_Plugin"><span class="nav-number">3.1.</span> <span class="nav-text">添加Gradle Plugin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u6DFB_u52A0Nuwa_SDK"><span class="nav-number">3.2.</span> <span class="nav-text">添加Nuwa SDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4F7F_u7528Nuwa"><span class="nav-number">3.3.</span> <span class="nav-text">使用Nuwa</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4EE3_u7801_u6DF7_u6DC6"><span class="nav-number">3.4.</span> <span class="nav-text">代码混淆</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
