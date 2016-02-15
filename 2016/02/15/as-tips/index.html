@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android," />
+  <meta name="keywords" content="Android,效率," />
 
 
 
@@ -57,20 +57,26 @@
 
 
 
-<meta name="description" content="If you have ever entered some testing text in a TextView to see how it looks in the previewer, then this is for you.
-For any attribute in the xml that has the pattern ‘android:something=”value”‘, you">
+<meta name="description" content="Android Studio Tips（OSX）使用Android Studio开发已经一年多了，这是Google力推的Android开发工具（而且官方已经放弃Eclipse ADT更新了）。
+自从开发Android从eclipse迁移到Android Studio后，为了提高自己的开发效率，奉着“键盘可以替代鼠标”的理念，先是去网上搜罗各种快捷键， 接着又搜罗各种插件来提升开发效率。
+其实关于插">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android静态布局中tools命名空间的作用">
-<meta property="og:url" content="http://yoursite.com/2015/12/19/tools-namespace/index.html">
+<meta property="og:title" content="Android Studio Tips（OSX）">
+<meta property="og:url" content="http://yoursite.com/2016/02/15/as-tips/index.html">
 <meta property="og:site_name" content="Archmage's Temple">
-<meta property="og:description" content="If you have ever entered some testing text in a TextView to see how it looks in the previewer, then this is for you.
-For any attribute in the xml that has the pattern ‘android:something=”value”‘, you">
-<meta property="og:image" content="http://ww4.sinaimg.cn/large/53488390gw1ez52s9860dg20e205x78k.gif">
-<meta property="og:updated_time" content="2015-12-19T09:35:24.000Z">
+<meta property="og:description" content="Android Studio Tips（OSX）使用Android Studio开发已经一年多了，这是Google力推的Android开发工具（而且官方已经放弃Eclipse ADT更新了）。
+自从开发Android从eclipse迁移到Android Studio后，为了提高自己的开发效率，奉着“键盘可以替代鼠标”的理念，先是去网上搜罗各种快捷键， 接着又搜罗各种插件来提升开发效率。
+其实关于插">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/53488390gw1f0dvn6wa7cj20bt04pdg4.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/53488390gw1f0dvnvhbn2g20cp0bsn6d.gif">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/53488390gw1f0dvofvjtkg20cp0bsju9.gif">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/53488390gw1f0dvp2jd3ag20cp0bsmym.gif">
+<meta property="og:updated_time" content="2016-02-15T05:30:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android静态布局中tools命名空间的作用">
-<meta name="twitter:description" content="If you have ever entered some testing text in a TextView to see how it looks in the previewer, then this is for you.
-For any attribute in the xml that has the pattern ‘android:something=”value”‘, you">
+<meta name="twitter:title" content="Android Studio Tips（OSX）">
+<meta name="twitter:description" content="Android Studio Tips（OSX）使用Android Studio开发已经一年多了，这是Google力推的Android开发工具（而且官方已经放弃Eclipse ADT更新了）。
+自从开发Android从eclipse迁移到Android Studio后，为了提高自己的开发效率，奉着“键盘可以替代鼠标”的理念，先是去网上搜罗各种快捷键， 接着又搜罗各种插件来提升开发效率。
+其实关于插">
 
 
 
@@ -88,7 +94,7 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
   };
 </script>
 
-  <title> Android静态布局中tools命名空间的作用 | Archmage's Temple </title>
+  <title> Android Studio Tips（OSX） | Archmage's Temple </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -216,7 +222,7 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
             
             
               
-                Android静态布局中tools命名空间的作用
+                Android Studio Tips（OSX）
               
             
           </h1>
@@ -228,8 +234,8 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-12-19T17:27:35+08:00" content="2015-12-19">
-              2015-12-19
+            <time itemprop="dateCreated" datetime="2016-02-15T13:28:35+08:00" content="2016-02-15">
+              2016-02-15
             </time>
           </span>
 
@@ -258,8 +264,8 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/19/tools-namespace/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/19/tools-namespace/" itemprop="commentsCount"></span>
+                <a href="/2016/02/15/as-tips/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/15/as-tips/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -280,14 +286,29 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
       
 
       
-        <p>If you have ever entered some testing text in a TextView to see how it looks in the previewer, then this is for you.</p>
-<p>For any attribute in the xml that has the pattern ‘android:something=”value”‘, you can add a new attribute named <code>tools:something=”value”</code> and it will be picked up by the previewer but ignored in your app. Then you can leave default values that makes sense to visualize the layout without impacting the final build.</p>
-<p>Two things that you should check using the tools namespace:</p>
-<p>1) Text that will be set at runtime (so that you don’t try to visualize an empty layout)</p>
-<p>2) Stuff that is dynamically changed later (e.g. visibility)</p>
-<p>To configure the tools namespace, put this in the root tag of your layout (under the android xmlns):</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">xmlns:</span>tools=<span class="string">http:</span><span class="comment">//schemas.android.com/tools</span></span><br></pre></td></tr></table></figure>
-<p><img src="http://ww4.sinaimg.cn/large/53488390gw1ez52s9860dg20e205x78k.gif" alt="image"></p>
+        <h1 id="Android_Studio_Tips_uFF08OSX_uFF09"><a href="#Android_Studio_Tips_uFF08OSX_uFF09" class="headerlink" title="Android Studio Tips（OSX）"></a>Android Studio Tips（OSX）</h1><p>使用Android Studio开发已经一年多了，这是Google力推的Android开发工具（而且官方已经放弃Eclipse ADT更新了）。</p>
+<p>自从开发Android从eclipse迁移到Android Studio后，为了提高自己的开发效率，奉着“键盘可以替代鼠标”的理念，先是去网上搜罗各种快捷键， 接着又搜罗各种插件来提升开发效率。</p>
+<p>其实关于插件和快捷键以及AS的使用技巧，网上有各种详细的教程。这里告诉大家<strong>不用都记住</strong>，因为常用的就那么几个，下面我就把我自己经常用的，好用的快捷键以及插件分享给大家。<br>【备注】由于我开发使用的是mac电脑，下面的快捷键都是osx下面的，windows小伙伴忽略</p>
+<h2 id="u5FEB_u6377_u952E"><a href="#u5FEB_u6377_u952E" class="headerlink" title="快捷键"></a>快捷键</h2><p>展开部分代码块：<code>cmd + &quot;+&quot;</code><br>展开全部代码块：<code>cmd + shift + &quot;+&quot;</code></p>
+<p>折叠部分代码块：<code>cmd + &quot;-&quot;</code><br>折叠全部代码块：<code>cmd + shift + &quot;-&quot;</code>    </p>
+<p>提取方法：<code>cmd + option + M</code><br>跳转到指定行数： <code>cmd + L</code><br>指定行数代码添加try catch/if/while等： <code>cmd + option + T</code>      </p>
+<p>复写父类方法： <code>ctrl + O</code><br>实现接口方法： <code>ctrl + I</code>      </p>
+<p>调用生成器（getter setter/toString/equals等）: <code>cmd + N</code><br>查找被使用的地方： <code>option + F7</code><br>格式化代码： <code>cmd + option + L</code><br>全局搜索： <code>double shift(快速按两下shift键)</code>      </p>
+<p>打开一个类： <code>cmd + O</code><br>打开一个文件： <code>cmd + shift + O</code>      </p>
+<p>最近打开的文件： <code>cmd + E</code><br>最近编辑的文件：<code>cmd + shift + E</code>      </p>
+<p>跳转到类、变量、方法声明的地方： <code>cmd + B</code><br>跳转到父类：<code>cmd + U</code><br>重命名变量名或者方法名： <code>shift + F6</code>    </p>
+<a id="more"></a>
+<h2 id="Android_Studio__u63A8_u8350_u63D2_u4EF6"><a href="#Android_Studio__u63A8_u8350_u63D2_u4EF6" class="headerlink" title="Android Studio 推荐插件"></a>Android Studio 推荐插件</h2><h3 id="Android_Studio_u5B89_u88C5_u63D2_u4EF6_u7684_u65B9_u6CD5_uFF1A"><a href="#Android_Studio_u5B89_u88C5_u63D2_u4EF6_u7684_u65B9_u6CD5_uFF1A" class="headerlink" title="Android Studio安装插件的方法："></a>Android Studio安装插件的方法：</h3><p>preferences - plugins，在输入框中输入插件名称后搜索，安装后重启就ok了</p>
+<h3 id="u63A8_u8350_u5217_u8868"><a href="#u63A8_u8350_u5217_u8868" class="headerlink" title="推荐列表"></a>推荐列表</h3><ul>
+<li><code>ADBIdea</code> adb命令快捷菜单，重启、卸载、清除数据等（个人常用清除数据操作，开发调试经常用到）<br>  <img src="http://ww3.sinaimg.cn/large/53488390gw1f0dvn6wa7cj20bt04pdg4.jpg" alt="image"> </li>
+<li><code>GsonFromat</code> 根据json数据格式生成相应的实体类</li>
+<li><code>Android Parcelable code generate</code> 自动生成Parcelable代码<br>  <img src="http://ww2.sinaimg.cn/large/53488390gw1f0dvnvhbn2g20cp0bsn6d.gif" alt="image"></li>
+<li><code>AndroidAccessors</code> 自动生成成员变量的get/set方法，不带m</li>
+<li><code>SelectorChapek for Android</code> 按照不同状态(normal、pressed)的标准命名后，右键文件树Generate Android,自动生成xml drawable</li>
+<li><code>Android ButterKnife Zelezny</code> ButterKnife injections自动生成器<br>  <img src="http://ww1.sinaimg.cn/large/53488390gw1f0dvofvjtkg20cp0bsju9.gif" alt="image"></li>
+<li><code>Android Annotations @ViewById injection code generate</code> Android Annotations自动生成器<br>  <img src="http://ww2.sinaimg.cn/large/53488390gw1f0dvp2jd3ag20cp0bsmym.gif" alt="image"></li>
+</ul>
+<h3 id="u6700_u540E"><a href="#u6700_u540E" class="headerlink" title="最后"></a>最后</h3><p>国外有个大神 <strong>Philippe Breault</strong>写过AS使用技巧系列文章，它在<a href="https://plus.google.com/+PhilippeBreault" target="_blank" rel="external">G+</a>上经常更新，另外他的<a href="http://www.developerphil.com/" target="_blank" rel="external">博客</a>也有相关文章，大家可以参考。</p>
 
       
     </div>
@@ -298,6 +319,8 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
           
             <a href="/tags/Android/" rel="tag">#Android</a>
           
+            <a href="/tags/效率/" rel="tag">#效率</a>
+          
         </div>
       
 
@@ -305,13 +328,13 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/02/15/android最佳实践/" rel="next" title="Android开发中的“要”与“不要”">
+                <i class="fa fa-chevron-left"></i> Android开发中的“要”与“不要”
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/19/multi-packages/" rel="prev" title="Android自动化之多渠道打包">
-                Android自动化之多渠道打包 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -337,8 +360,8 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/19/tools-namespace/"
-           data-title="Android静态布局中tools命名空间的作用" data-url="http://yoursite.com/2015/12/19/tools-namespace/">
+      <div class="ds-thread" data-thread-key="2016/02/15/as-tips/"
+           data-title="Android Studio Tips（OSX）" data-url="http://yoursite.com/2016/02/15/as-tips/">
       </div>
     
   </div>
@@ -455,7 +478,7 @@ For any attribute in the xml that has the pattern ‘android:something=”value�
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android_Studio_Tips_uFF08OSX_uFF09"><span class="nav-number">1.</span> <span class="nav-text">Android Studio Tips（OSX）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u5FEB_u6377_u952E"><span class="nav-number">1.1.</span> <span class="nav-text">快捷键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android_Studio__u63A8_u8350_u63D2_u4EF6"><span class="nav-number">1.2.</span> <span class="nav-text">Android Studio 推荐插件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Android_Studio_u5B89_u88C5_u63D2_u4EF6_u7684_u65B9_u6CD5_uFF1A"><span class="nav-number">1.2.1.</span> <span class="nav-text">Android Studio安装插件的方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u63A8_u8350_u5217_u8868"><span class="nav-number">1.2.2.</span> <span class="nav-text">推荐列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6700_u540E"><span class="nav-number">1.2.3.</span> <span class="nav-text">最后</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
