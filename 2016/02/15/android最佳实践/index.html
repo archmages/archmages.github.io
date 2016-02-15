@@ -1,0 +1,816 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
+
+
+
+
+
+
+<meta name="description" content="Android开发中的“要”与“不要”我们在开发Android应用的过程中，不能只满足于实现功能，应该遵循一些准则，使得我们的代码优雅并且便于维护和扩展，我们应该做到如下几“要”和几“不要”  
+要
+使用Gradle以及Gradle推荐的工程结构
+把密码以及敏感信息放在gradle.properties中
+受限于65k method limit，尽量使用轻量的库
+使用第三方库解析JSON数据
+使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android开发中的“要”与“不要”">
+<meta property="og:url" content="http://yoursite.com/2016/02/15/android最佳实践/index.html">
+<meta property="og:site_name" content="Archmage's Temple">
+<meta property="og:description" content="Android开发中的“要”与“不要”我们在开发Android应用的过程中，不能只满足于实现功能，应该遵循一些准则，使得我们的代码优雅并且便于维护和扩展，我们应该做到如下几“要”和几“不要”  
+要
+使用Gradle以及Gradle推荐的工程结构
+把密码以及敏感信息放在gradle.properties中
+受限于65k method limit，尽量使用轻量的库
+使用第三方库解析JSON数据
+使用">
+<meta property="og:updated_time" content="2016-02-15T05:26:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android开发中的“要”与“不要”">
+<meta name="twitter:description" content="Android开发中的“要”与“不要”我们在开发Android应用的过程中，不能只满足于实现功能，应该遵循一些准则，使得我们的代码优雅并且便于维护和扩展，我们应该做到如下几“要”和几“不要”  
+要
+使用Gradle以及Gradle推荐的工程结构
+把密码以及敏感信息放在gradle.properties中
+受限于65k method limit，尽量使用轻量的库
+使用第三方库解析JSON数据
+使用">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android开发中的“要”与“不要” | Archmage's Temple </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?da710790a496bc89a396c9df47db0d72";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Archmage's Temple</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">追求卓越</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android开发中的“要”与“不要”
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-15T13:12:30+08:00" content="2016-02-15">
+              2016-02-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/15/android最佳实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/15/android最佳实践/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Android_u5F00_u53D1_u4E2D_u7684_u201C_u8981_u201D_u4E0E_u201C_u4E0D_u8981_u201D"><a href="#Android_u5F00_u53D1_u4E2D_u7684_u201C_u8981_u201D_u4E0E_u201C_u4E0D_u8981_u201D" class="headerlink" title="Android开发中的“要”与“不要”"></a>Android开发中的“要”与“不要”</h1><p>我们在开发Android应用的过程中，不能只满足于实现功能，应该遵循一些准则，使得我们的代码优雅并且便于维护和扩展，我们应该做到如下几“要”和几“不要”  </p>
+<h2 id="u8981"><a href="#u8981" class="headerlink" title="要"></a>要</h2><ul>
+<li><a href="#build-system">使用Gradle以及Gradle推荐的工程结构</a></li>
+<li><a href="#gradle-config">把密码以及敏感信息放在gradle.properties中</a></li>
+<li><a href="#light-library">受限于<em>65k method limit</em>，尽量使用轻量的库</a></li>
+<li><a href="#json解析">使用第三方库解析JSON数据</a></li>
+<li><a href="#layout-styles">使用styles来避免layout xml中重复的属性</a></li>
+<li><a href="#genymotion">使用Genymotion模拟器（此模拟器真的很快）</a></li>
+<li><a href="#proguard">必须使用Proguard混淆代码</a></li>
+</ul>
+<h2 id="u4E0D_u8981"><a href="#u4E0D_u8981" class="headerlink" title="不要"></a>不要</h2><ul>
+<li><a href="#httpclient">不要自己写Http Client, 使用Volley或者OkHttp库</a></li>
+<li><a href="#split-style">不要把一个styles.xml写得很大，尽量拆分</a></li>
+<li><a href="#colors">colors.xml不要写得复杂，只定义一个调色板就ok</a></li>
+<li><a href="#dimens">dimens.xml也不要写得复杂，只定义通用的尺寸</a></li>
+<li><a href="#view-hierarchy">不要把View的层级写得很深</a>  </li>
+</ul>
+<p></p><h3 id="build-system">项目结构</h3><br>Google推荐使用Gradle &amp; Android Studio开发Android项目，新的工程结构是这个样子的:<p></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">new-structure</span><br><span class="line">├─ library-foobar</span><br><span class="line">├─ app</span><br><span class="line">│  ├─ libs</span><br><span class="line">│  ├─ src</span><br><span class="line">│  │  ├─ androidTest</span><br><span class="line">│  │  │  └─ java</span><br><span class="line">│  │  │     └─ com/futurice/project</span><br><span class="line">│  │  └─ main</span><br><span class="line">│  │     ├─ java</span><br><span class="line">│  │     │  └─ com/futurice/project</span><br><span class="line">│  │     ├─ res</span><br><span class="line">│  │     └─ AndroidManifest.xml</span><br><span class="line">│  ├─ build.gradle</span><br><span class="line">│  └─ proguard-rules.pro</span><br><span class="line">├─ build.gradle</span><br><span class="line">└─ settings.gradle</span><br></pre></td></tr></table></figure>
+<p></p><h3 id="gradle-config">Gradle配置</h3><br>在我们app的builde.gradle文件中，我们需要针对release build定义<code>signingConfigs</code> , 也许我们会这么写：<p></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">signingConfigs &#123;</span><br><span class="line">    release &#123;</span><br><span class="line">        storeFile file(<span class="string">"myapp.keystore"</span>)</span><br><span class="line">        storePassword <span class="string">"password123"</span></span><br><span class="line">        keyAlias <span class="string">"thekey"</span></span><br><span class="line">        keyPassword <span class="string">"password789"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种写法我们是不推荐的，因为密码是敏感信息，我们应该将其放置<code>gradle.properties</code>中，应该这样：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">KEYSTORE_PASSWORD=password123</span><br><span class="line">KEY_PASSWORD=password789</span><br></pre></td></tr></table></figure>
+<p>然后我们的build.gradle文件应该这样写：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">signingConfigs &#123;</span><br><span class="line">    release &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            storeFile file(<span class="string">"myapp.keystore"</span>)</span><br><span class="line">            storePassword KEYSTORE_PASSWORD</span><br><span class="line">            keyAlias <span class="string">"thekey"</span></span><br><span class="line">            keyPassword KEY_PASSWORD</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidUserDataException(<span class="string">"You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties."</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p></p><h3 id="light-library">当心dex方法超出65536限制，避免使用过多，过大的第三方库</h3><br>Android应用，当打包成dex文件的时候，方法数不能超过65536个。如果超过这个限制，打包的时候就会报错，尽量少使用第三方库。当我们要引入一个第三方库，同时有多种库选择的时候，我们要尽量选择放法数少的那个库，尽量保持轻量，我们可以使用<a href="https://github.com/mihaip/dex-method-counts" target="_blank" rel="external">dex-method-count</a>来检测方法数  <p></p>
+<p></p><h3 id="json解析">Json解析</h3><br>如果我们项目中需要用到Json数据解析，我们不要重复造轮子，尽量使用第三方库。优秀的Json解析库有<a href="http://wiki.fasterxml.com/JacksonHome" target="_blank" rel="external">Jackson</a>、<a href="https://code.google.com/p/google-gson/" target="_blank" rel="external">Gson</a>、<a href="https://code.google.com/archive/p/json-smart/" target="_blank" rel="external">Json-smart</a>、<a href="https://github.com/RichardHightower/boon" target="_blank" rel="external">Boon JSON</a>，个人推荐Gson, 因为Gson库更轻量，更好地避免放法数过大  <p></p>
+<p></p><h3 id="layout-styles">避免layout重复属性</h3><br>几乎每个工程都需要用到styles, 因为它对于一些重复定义的属性来讲，非常地方便。对于应用中的大多数文字内容来说，至少我们应该有一个通用属性，例如：<p></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">style</span> <span class="attribute">name</span>=<span class="value">"ContentText"</span>&gt;</span><span class="css"></span><br><span class="line">    &lt;<span class="tag">item</span> <span class="tag">name</span>="<span class="tag">android</span><span class="pseudo">:textSize"</span>&gt;<span class="at_rule">@<span class="keyword">dimen/font_normal&lt;/item&gt;</span></span><br><span class="line">    &lt;item name=<span class="string">"android:textColor"</span>&gt;@color/basic_black&lt;/item&gt;</span><br><span class="line"></span></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>对于layout中的TextView， 我们这么引用属性:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">TextView</span></span><br><span class="line">    <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span></span><br><span class="line">    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span></span><br><span class="line">    <span class="attribute">android:text</span>=<span class="value">"@string/price"</span></span><br><span class="line">    <span class="attribute">style</span>=<span class="value">"@style/ContentText"</span></span><br><span class="line">    /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>不单单对于TextView, 对于其它控件：Button, ImageView等都需要定义通用的属性，在开发过程中，我们还应该持续性地对重复定义的属性进行抽象。  </p>
+<p></p><h3 id="genymotion">使用Genymotion模拟器</h3><br>工欲善其事必先利器，Android自带的模拟器一直被吐槽，速度太慢，太卡，开发效率降低地不是一星半点。<a href="http://www.genymotion.com/" target="_blank" rel="external">Genymotion</a>成功解决了我们的苦恼。除了速度快之外，Genymotion还能模拟GPS点，模拟网络链接等等。   <p></p>
+<p></p><h3 id="proguard">使用ProGuard混淆代码</h3><br><a href="http://proguard.sourceforge.net/" target="_blank" rel="external">ProGuard</a>是用来压缩和混淆Android项目代码的工具，从安全和隐私角度考虑，我们是必须要混淆我们的代码的<br>通常我们通过配置Gradle文件，当发布Release Apk的时候使用ProGurad压缩:<p></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">buildTypes &#123;</span><br><span class="line">    debug &#123;</span><br><span class="line">        minifyEnabled <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    release &#123;</span><br><span class="line">        signingConfig signingConfigs.release</span><br><span class="line">        minifyEnabled <span class="literal">true</span></span><br><span class="line">        proguardFiles getDefaultProguardFile(<span class="string">'proguard-android.txt'</span>), <span class="string">'proguard-rules.pro'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Android framework已经包含了默认的混淆配置，在<code>SDK_HOME/tools/proguard/proguard-android.txt</code>文件中。如果我们需要自定义哪些文件需要混淆，哪些文件不需要混淆，我们需要在<code>my-project/app/pruguard-ruls.pro</code>文件中做相应配置</p>
+<p>避免ProGuard去除掉需要的类或者类成员，使用<code>keep</code>选项：</p>
+<p><code>-keep class com.xx.project.MyClass { *; }</code></p>
+<p>避免ProGuard混淆某些类或者类成员，使用<code>keepnames</code>选项</p>
+<p><code>-keepnames class com.xx.project.MyClass { *; }</code></p>
+<p></p><h3 id="httpclient">不要自己写Http Client, 使用Volley或者OkHttp库</h3><br>Http Client开源解决方案有好几个，<a href="https://github.com/square/okhttp" target="_blank" rel="external">okhttp</a>, <a href="http://square.github.io/retrofit/" target="_blank" rel="external">Retrofit</a>, <a href="https://github.com/loopj/android-async-http" target="_blank" rel="external">android-async-http</a>和<a href="https://android.googlesource.com/platform/frameworks/volley" target="_blank" rel="external">Volley</a>, 在平时项目的开发中，我们应该选择哪种解决方案呢？<p></p>
+<h4 id="okhttp_u4E0Easync_http"><a href="#okhttp_u4E0Easync_http" class="headerlink" title="okhttp与async http"></a>okhttp与async http</h4><p>okhttp 和 async http是一个基础的通信库，都很强大，但需要自己封装使用才更方便。另外okhttp已经被谷歌官方用在android源码中了。</p>
+<h4 id="Retrofit__u4E0E_Volley"><a href="#Retrofit__u4E0E_Volley" class="headerlink" title="Retrofit 与 Volley"></a>Retrofit 与 Volley</h4><p>Retrofit和 Volley是属于比较高级点的封装库了</p>
+<p>如果是标准的RESTful API,那么用Retrofit会非常爽！网络交互部分代码量可以减少90%。同时支持Gson,契合度很高。</p>
+<p>另外，Retrofit和okhttp是亲兄弟，建议一起用，okhttp是底层库，能够支持一些非标准的HTTP方法，比如PATCH方法。</p>
+<p>Volley自己的定位是轻量级网络交互，适合大量的，小数据传输，如果你的项目比较大，那么目测还得把volley再次封装才会好用一些。</p>
+<p></p><h3 id="split-style">拆分style, 不要把单个style文件写得很大</h3><br>我们不能只写一个<code>styles.xml</code>, 把单个文件写得很大，难以维护。<br>Android SDK支持其他文件,<code>styles</code>文件只要有XML标记<code>&lt;style&gt;</code>就可以。因此我们也许会有这些style文件：<code>styles_home.xml</code>,<code>styles_item_details.xml</code>,<code>styles_forms.xml</code>。style文件必须放在<code>res/values</code>下面<p></p>
+<p></p><h3 id="colors">colors.xml不需要写得复杂</h3><br><code>colors.xml</code>尽量保持简单，不能什么颜色都定义在里面。<p></p>
+<p><em>Don’t do this:</em></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"button_foreground"</span>&gt;</span>#FFFFFF<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"button_background"</span>&gt;</span>#2A91BD<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"comment_background_inactive"</span>&gt;</span>#5F5F5F<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"comment_background_active"</span>&gt;</span>#939393<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"comment_foreground"</span>&gt;</span>#FFFFFF<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"comment_foreground_important"</span>&gt;</span>#FF9D2F<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"comment_shadow"</span>&gt;</span>#323232<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>我们定义一个调色板就可以了。</p>
+<p><em>Instead, do this:</em></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- grayscale --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"white"</span>     &gt;</span>#FFFFFF<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"gray_light"</span>&gt;</span>#DBDBDB<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"gray"</span>      &gt;</span>#939393<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"gray_dark"</span> &gt;</span>#5F5F5F<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"black"</span>     &gt;</span>#323232<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- basic colors --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"green"</span>&gt;</span>#27D34D<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"blue"</span>&gt;</span>#2A91BD<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"orange"</span>&gt;</span>#FF9D2F<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">color</span> <span class="attribute">name</span>=<span class="value">"red"</span>&gt;</span>#FF432F<span class="tag">&lt;/<span class="title">color</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">resources</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p></p><h3 id="dimens">dimens不要写得复杂</h3><br>我们也应该定义一个典型的间距和字体大小, 一个好的<code>dimens.xml</code>示例如下：<p></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">resources</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- font sizes --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"font_larger"</span>&gt;</span>22sp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"font_large"</span>&gt;</span>18sp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"font_normal"</span>&gt;</span>15sp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"font_small"</span>&gt;</span>12sp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- typical spacing between two views --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"spacing_huge"</span>&gt;</span>40dp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"spacing_large"</span>&gt;</span>24dp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"spacing_normal"</span>&gt;</span>14dp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"spacing_small"</span>&gt;</span>10dp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"spacing_tiny"</span>&gt;</span>4dp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- typical sizes of views --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"button_height_tall"</span>&gt;</span>60dp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"button_height_normal"</span>&gt;</span>40dp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">dimen</span> <span class="attribute">name</span>=<span class="value">"button_height_short"</span>&gt;</span>32dp<span class="tag">&lt;/<span class="title">dimen</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">resources</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p></p><h3 id="view-hierarchy">不要把View层级写得很深</h3><br>我们在写静态布局的时候，往往为了实现布局，不注意就把view嵌套得很深，如下一个反面教材：<p></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">LinearLayout</span></span><br><span class="line">    <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">    <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span></span><br><span class="line">    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span></span><br><span class="line">    &gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="title">RelativeLayout</span></span><br><span class="line">        <span class="attribute">...</span></span><br><span class="line">        &gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="title">LinearLayout</span></span><br><span class="line">            <span class="attribute">...</span></span><br><span class="line">            &gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="title">LinearLayout</span></span><br><span class="line">                <span class="attribute">...</span></span><br><span class="line">                &gt;</span></span><br><span class="line"></span><br><span class="line">                <span class="tag">&lt;<span class="title">LinearLayout</span></span><br><span class="line">                    <span class="attribute">...</span></span><br><span class="line">                    &gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="title">RelativeLayout</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样写，会带来很多问题，首先是性能问题，体验效果会不好。另外一个问题详见<a href="http://stackoverflow.com/questions/2762924/java-lang-stackoverflow-error-suspected-too-many-views" target="_blank" rel="external">StackOverflowError</a></p>
+<p>因此，尽量保持我们的view层级扁平：学习如何使用<a href="https://developer.android.com/guide/topics/ui/layout/relative.html" target="_blank" rel="external">RelativeLayout</a>, 如何<a href="http://developer.android.com/intl/zh-cn/training/improving-layouts/optimizing-layout.html" target="_blank" rel="external">优化我们的layouts</a>以及如何使用<a href="http://stackoverflow.com/questions/8834898/what-is-the-purpose-of-androids-merge-tag-in-xml-layouts" target="_blank" rel="external"><code>&lt;merge&gt;</code>标签</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/29/Nuwa-HotFix/" rel="next" title="基于Nuwa实现Android自动化HotFix">
+                <i class="fa fa-chevron-left"></i> 基于Nuwa实现Android自动化HotFix
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/15/android最佳实践/"
+           data-title="Android开发中的“要”与“不要”" data-url="http://yoursite.com/2016/02/15/android最佳实践/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars.githubusercontent.com/u/2337950?v=3"
+               alt="David.Yu" />
+          <p class="site-author-name" itemprop="name">David.Yu</p>
+          <p class="site-description motion-element" itemprop="description">Google Fans、Android Follower</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/archmages" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/archmages" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/archmages" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> Zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android_u5F00_u53D1_u4E2D_u7684_u201C_u8981_u201D_u4E0E_u201C_u4E0D_u8981_u201D"><span class="nav-number">1.</span> <span class="nav-text">Android开发中的“要”与“不要”</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u8981"><span class="nav-number">1.1.</span> <span class="nav-text">要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E0D_u8981"><span class="nav-number">1.2.</span> <span class="nav-text">不要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#build-system"><span class="nav-number">1.2.1.</span> <span class="nav-text">项目结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gradle-config"><span class="nav-number">1.2.2.</span> <span class="nav-text">Gradle配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#light-library"><span class="nav-number">1.2.3.</span> <span class="nav-text">当心dex方法超出65536限制，避免使用过多，过大的第三方库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json解析"><span class="nav-number">1.2.4.</span> <span class="nav-text">Json解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#layout-styles"><span class="nav-number">1.2.5.</span> <span class="nav-text">避免layout重复属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#genymotion"><span class="nav-number">1.2.6.</span> <span class="nav-text">使用Genymotion模拟器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proguard"><span class="nav-number">1.2.7.</span> <span class="nav-text">使用ProGuard混淆代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#httpclient"><span class="nav-number">1.2.8.</span> <span class="nav-text">不要自己写Http Client, 使用Volley或者OkHttp库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#okhttp_u4E0Easync_http"><span class="nav-number">1.2.8.1.</span> <span class="nav-text">okhttp与async http</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrofit__u4E0E_Volley"><span class="nav-number">1.2.8.2.</span> <span class="nav-text">Retrofit 与 Volley</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#split-style"><span class="nav-number">1.2.9.</span> <span class="nav-text">拆分style, 不要把单个style文件写得很大</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#colors"><span class="nav-number">1.2.10.</span> <span class="nav-text">colors.xml不需要写得复杂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dimens"><span class="nav-number">1.2.11.</span> <span class="nav-text">dimens不要写得复杂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#view-hierarchy"><span class="nav-number">1.2.12.</span> <span class="nav-text">不要把View层级写得很深</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David.Yu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"archmage"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

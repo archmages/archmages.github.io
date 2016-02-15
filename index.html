@@ -229,6 +229,142 @@
             
               
                 
+                <a class="post-title-link" href="/2016/02/15/android最佳实践/" itemprop="url">
+                  Android开发中的“要”与“不要”
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-15T13:12:30+08:00" content="2016-02-15">
+              2016-02-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/15/android最佳实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/15/android最佳实践/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Android_u5F00_u53D1_u4E2D_u7684_u201C_u8981_u201D_u4E0E_u201C_u4E0D_u8981_u201D"><a href="#Android_u5F00_u53D1_u4E2D_u7684_u201C_u8981_u201D_u4E0E_u201C_u4E0D_u8981_u201D" class="headerlink" title="Android开发中的“要”与“不要”"></a>Android开发中的“要”与“不要”</h1><p>我们在开发Android应用的过程中，不能只满足于实现功能，应该遵循一些准则，使得我们的代码优雅并且便于维护和扩展，我们应该做到如下几“要”和几“不要”  </p>
+<h2 id="u8981"><a href="#u8981" class="headerlink" title="要"></a>要</h2><ul>
+<li><a href="#build-system">使用Gradle以及Gradle推荐的工程结构</a></li>
+<li><a href="#gradle-config">把密码以及敏感信息放在gradle.properties中</a></li>
+<li><a href="#light-library">受限于<em>65k method limit</em>，尽量使用轻量的库</a></li>
+<li><a href="#json解析">使用第三方库解析JSON数据</a></li>
+<li><a href="#layout-styles">使用styles来避免layout xml中重复的属性</a></li>
+<li><a href="#genymotion">使用Genymotion模拟器（此模拟器真的很快）</a></li>
+<li><a href="#proguard">必须使用Proguard混淆代码</a></li>
+</ul>
+<h2 id="u4E0D_u8981"><a href="#u4E0D_u8981" class="headerlink" title="不要"></a>不要</h2><ul>
+<li><a href="#httpclient">不要自己写Http Client, 使用Volley或者OkHttp库</a></li>
+<li><a href="#split-style">不要把一个styles.xml写得很大，尽量拆分</a></li>
+<li><a href="#colors">colors.xml不要写得复杂，只定义一个调色板就ok</a></li>
+<li><a href="#dimens">dimens.xml也不要写得复杂，只定义通用的尺寸</a></li>
+<li><a href="#view-hierarchy">不要把View的层级写得很深</a>  </li>
+</ul>
+<p><h3 id="build-system">项目结构</h3><br>Google推荐使用Gradle &amp; Android Studio开发Android项目，新的工程结构是这个样子的:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">new-structure</span><br><span class="line">├─ library-foobar</span><br><span class="line">├─ app</span><br><span class="line">│  ├─ libs</span><br><span class="line">│  ├─ src</span><br><span class="line">│  │  ├─ androidTest</span><br><span class="line">│  │  │  └─ java</span><br><span class="line">│  │  │     └─ com/futurice/project</span><br><span class="line">│  │  └─ main</span><br><span class="line">│  │     ├─ java</span><br><span class="line">│  │     │  └─ com/futurice/project</span><br><span class="line">│  │     ├─ res</span><br><span class="line">│  │     └─ AndroidManifest.xml</span><br><span class="line">│  ├─ build.gradle</span><br><span class="line">│  └─ proguard-rules.pro</span><br><span class="line">├─ build.gradle</span><br><span class="line">└─ settings.gradle</span><br></pre></td></tr></table></figure>
+<p><h3 id="gradle-config">Gradle配置</h3><br>在我们app的builde.gradle文件中，我们需要针对release build定义<code>signingConfigs</code> , 也许我们会这么写：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">signingConfigs &#123;</span><br><span class="line">    release &#123;</span><br><span class="line">        storeFile file(<span class="string">"myapp.keystore"</span>)</span><br><span class="line">        storePassword <span class="string">"password123"</span></span><br><span class="line">        keyAlias <span class="string">"thekey"</span></span><br><span class="line">        keyPassword <span class="string">"password789"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种写法我们是不推荐的，因为密码是敏感信息，我们应该将其放置<code>gradle.properties</code>中，应该这样：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">KEYSTORE_PASSWORD=password123</span><br><span class="line">KEY_PASSWORD=password789</span><br></pre></td></tr></table></figure>
+<p>然后我们的build.gradle文件应该这样写：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">signingConfigs &#123;</span><br><span class="line">    release &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            storeFile file(<span class="string">"myapp.keystore"</span>)</span><br><span class="line">            storePassword KEYSTORE_PASSWORD</span><br><span class="line">            keyAlias <span class="string">"thekey"</span></span><br><span class="line">            keyPassword KEY_PASSWORD</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidUserDataException(<span class="string">"You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties."</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/02/15/android最佳实践/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/12/29/Nuwa-HotFix/" itemprop="url">
                   基于Nuwa实现Android自动化HotFix
                 </a>
@@ -851,7 +987,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -928,7 +1064,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2015</span>
+  <span itemprop="copyrightYear">2016</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>
