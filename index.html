@@ -197,15 +197,124 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/16/OSX-JDK一键切换的方法/" itemprop="url">
+                  OSX(ZSH) 一键切换JDK版本的方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-16T16:43:04+08:00" content="2016-03-16">
+              2016-03-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/16/OSX-JDK一键切换的方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/16/OSX-JDK一键切换的方法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        
-        
-        
       
 
       
-    
+        
+          
+            <h1 id="u80CC_u666F_28Why_29"><a href="#u80CC_u666F_28Why_29" class="headerlink" title="背景(Why)"></a>背景(Why)</h1><p>现在经常遇到一些事情需要不同的 JDK 环境. 比如编译 android4.4源码要 JDK6 ,编译 play framework(1.2.7) 需要JDK7(JDK8会报错)，这个时候要是能一键切换就能方便很多。下面我就向大家介绍一下OSX下zsh terminal一键切换JDK版本的方法。</p>
+<h1 id="u5982_u4F55_u5207_u6362_28How_29"><a href="#u5982_u4F55_u5207_u6362_28How_29" class="headerlink" title="如何切换(How)"></a>如何切换(How)</h1><p><code>vi ~/.zshrc</code></p>
+<p>在配置文件底部添加如下配置：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#JDK <span class="keyword">Switch</span></span><br><span class="line">export JAVA_6_HOME=<span class="regexp">/Library/</span>Java<span class="regexp">/JavaVirtualMachines/</span><span class="number">1.6</span>.<span class="number">0</span>.jdk<span class="regexp">/Contents/</span>Home</span><br><span class="line">export JAVA_7_HOME=<span class="regexp">/Library/</span>Java<span class="regexp">/JavaVirtualMachines/</span>jdk1.<span class="number">7.0</span>_67.jdk<span class="regexp">/Contents/</span>Home</span><br><span class="line">export JAVA_8_HOME=<span class="regexp">/Library/</span>Java<span class="regexp">/JavaVirtualMachines/</span>jdk1.<span class="number">8.0</span>_73.jdk<span class="regexp">/Contents/</span>Home</span><br><span class="line"></span><br><span class="line">export JAVA_HOME=$JAVA_8_HOME</span><br><span class="line"></span><br><span class="line">alias jdk8=<span class="string">'export JAVA_HOME=$JAVA_8_HOME'</span></span><br><span class="line">alias jdk7=<span class="string">'export JAVA_HOME=$JAVA_7_HOME'</span></span><br><span class="line">alias jdk6=<span class="string">'export JAVA_HOME=$JAVA_6_HOME'</span></span><br></pre></td></tr></table></figure>
+<p>然后命令行输入<code>jdk6/jdk7/jdk8</code> 就可以得到相应的版本</p>
+<h1 id="u8FD0_u884C_u6548_u679C"><a href="#u8FD0_u884C_u6548_u679C" class="headerlink" title="运行效果"></a>运行效果</h1><h2 id="Switch_JDK6"><a href="#Switch_JDK6" class="headerlink" title="Switch JDK6"></a>Switch JDK6</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ jdk6</span><br><span class="line">$ java -version</span><br><span class="line">java version <span class="string">"1.6.0_65"</span></span><br><span class="line"><span class="function"><span class="title">Java</span><span class="params">(TM)</span></span> SE Runtime Environment (build <span class="number">1.6</span>.<span class="number">0</span>_65-b14-<span class="number">468</span>-<span class="number">11</span>M4833)</span><br><span class="line">Java <span class="function"><span class="title">HotSpot</span><span class="params">(TM)</span></span> <span class="number">64</span>-Bit Server VM (build <span class="number">20.65</span>-b04-<span class="number">468</span>, mixed mode)</span><br></pre></td></tr></table></figure>
+<h2 id="Switch_JDK7"><a href="#Switch_JDK7" class="headerlink" title="Switch JDK7"></a>Switch JDK7</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ jdk7</span><br><span class="line">$ java -version</span><br><span class="line">java version <span class="string">"1.7.0_67"</span></span><br><span class="line"><span class="function"><span class="title">Java</span><span class="params">(TM)</span></span> SE Runtime Environment (build <span class="number">1.7</span>.<span class="number">0</span>_67-b01)</span><br><span class="line">Java <span class="function"><span class="title">HotSpot</span><span class="params">(TM)</span></span> <span class="number">64</span>-Bit Server VM (build <span class="number">24.65</span>-b04, mixed mode)</span><br></pre></td></tr></table></figure>
+<h2 id="Switch_JDK8"><a href="#Switch_JDK8" class="headerlink" title="Switch JDK8"></a>Switch JDK8</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ jdk8</span><br><span class="line">$ java -version</span><br><span class="line">java version <span class="string">"1.8.0_73"</span></span><br><span class="line"><span class="function"><span class="title">Java</span><span class="params">(TM)</span></span> SE Runtime Environment (build <span class="number">1.8</span>.<span class="number">0</span>_73-b02)</span><br><span class="line">Java <span class="function"><span class="title">HotSpot</span><span class="params">(TM)</span></span> <span class="number">64</span>-Bit Server VM (build <span class="number">25.73</span>-b02, mixed mode)</span><br></pre></td></tr></table></figure>
+<p>切换起来so easy啊, 一颗赛艇😄</p>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1109,7 +1218,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1123,7 +1232,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
